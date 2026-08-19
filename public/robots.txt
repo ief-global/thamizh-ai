@@ -1,0 +1,9 @@
+# thamizh-ai.org
+# Everything here is meant to be read, quoted and argued with. Nothing is disallowed.
+# The canonical host is thamizh-ai.org; preview and workers.dev deployments serve the same
+# pages and carry canonical tags pointing back here.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://thamizh-ai.org/sitemap-index.xml

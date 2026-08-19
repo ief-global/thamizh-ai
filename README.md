@@ -47,11 +47,21 @@ Node 18+ (built on 22). No database, no API, no server runtime. It is static fil
 Cloudflare builds this from GitHub. The dashboard asks for two commands and no output directory,
 because the output directory lives in [`wrangler.jsonc`](wrangler.jsonc) instead:
 
-| Field | Value |
-|---|---|
-| Build command | `npm run build` |
-| Deploy command | `npx wrangler deploy` |
-| Root directory | leave empty |
+| Field | Value | Where |
+|---|---|---|
+| Build command | `npm run build` | Settings → Build |
+| Deploy command | `npx wrangler deploy` | Settings → Build |
+| Root directory | leave empty | Settings → Build |
+| **Production branch** | **`main`** | Settings → Build → **Branch control** |
+| Builds for non-production branches | on, if you want preview URLs per PR | same panel |
+| Custom domain | `thamizh-ai.org` | Settings → **Domains & Routes** → Add → Custom Domain |
+
+**Production branch defaults to the repository's default branch**, so check it. If it is set to
+`develop`, every integration push goes straight to the live site, which is exactly what the
+`develop` → PR → `main` flow exists to prevent.
+
+Turning non-production builds on is worth it here: each PR gets its own URL, so the rendered Tamil
+can be checked before merge rather than after.
 
 `wrangler.jsonc` declares `assets.directory: "./dist"`, `html_handling: "auto-trailing-slash"` so a
 page is served at `/why` rather than `/why.html`, and `not_found_handling: "404-page"` so a bad URL
