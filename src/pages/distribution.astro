@@ -1,0 +1,143 @@
+---
+import Base from '../layouts/Base.astro';
+
+const rungs = [
+  { n: 'Now', title: 'Clone it and run it', state: 'done',
+    what: 'The code is public and Apache-2.0. Anyone can clone it, install the dependencies and run the server or the browser page today.',
+    cost: 'Nothing to us. Somebody else’s machine.' },
+  { n: 'Next', title: 'Install it in one command', state: 'open',
+    what: 'A published package, so an ordinary install works without cloning, and a container image for people who would rather not install a native binary at all.',
+    cost: 'Nothing to us. Still their machine.' },
+  { n: 'Then', title: 'Be findable', state: 'open',
+    what: 'The registries an MCP client actually reads, and the Tamil NLP catalogue that this project sources from in the first place. An unlisted server is invisible.',
+    cost: 'Time, not money.' },
+  { n: 'Then', title: 'A page anyone can use', state: 'partial',
+    what: 'The browser page already exists and runs. Making it public for everyone is a hosting decision rather than a building one.',
+    cost: 'Real, and small. This is the first rung that costs anything.' },
+  { n: 'Later', title: 'A phone app', state: 'open',
+    what: 'A thin app over the hosted API. Running the analyser on the phone itself is not realistic: it needs a native binary and a lexicon, and that is a much larger, later project.',
+    cost: 'Store fees, plus the backend it talks to.' },
+];
+---
+<Base
+  title="பகிர்வு, getting it to people"
+  description="How a Tamil grammar engine reaches a Tamil speaker who will never install anything, and what each step costs a nonprofit."
+  derivesFrom={[
+    { label: 'distribution-roadmap.md', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/distribution-roadmap.md' },
+    { label: 'DESIGN.md §5 and §6', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">Layer 4</p>
+      <h1 class="ta">பகிர்வு <span class="en">distribution</span></h1>
+      <p class="lede">
+        A grammar engine that nobody can reach is a hobby. This layer is about the distance between a
+        working server and a Tamil teacher who has never heard of any of this.
+      </p>
+    </header>
+
+    <section>
+      <h2>An MCP server is not a thing people use</h2>
+      <p>
+        It is an adapter that lets an AI assistant call your logic. Nobody outside software will ever
+        install one, and treating it as the product would strand this project among developers.
+      </p>
+      <p>
+        So the thing being distributed is <a href="/engine">the engine</a>, and the MCP server is one
+        adapter on it. A REST API is another, the browser page is another, and the command line is a
+        fourth. Each reaches a different person, and only one of them requires the reader to be
+        technical at all.
+      </p>
+      <div class="who">
+        <div class="w"><p class="wt">Assistants</p><p class="wd">Somebody asks Claude a Tamil grammar question, and it looks the answer up rather than recalling it.</p></div>
+        <div class="w"><p class="wt">App builders</p><p class="wd">A Tamil grammar helper for school students becomes an API call. The developer needs no grammar expertise, and the teacher can check the citation.</p></div>
+        <div class="w"><p class="wt">Everyone else</p><p class="wd">A web page where you type a word. No install, no account, no assistant. This is where most Tamil speakers are.</p></div>
+        <div class="w"><p class="wt">Researchers</p><p class="wd">Verified datasets, published where people who train models actually look.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>The rungs, and where we actually are</h2>
+      <p class="note">
+        <b>Rung two is not done.</b> Nothing has been released, the version is still 0.1.0, and today
+        the only way to run this is to clone it. That is the honest position and it is the most
+        useful thing on this page.
+      </p>
+      <ol class="rungs">
+        {rungs.map((r) => (
+          <li class:list={['rung', `st-${r.state}`]}>
+            <p class="rn">{r.n}</p>
+            <p class="rt">{r.title}</p>
+            <p class="rw ta">{r.what}</p>
+            <p class="rc">Cost: {r.cost}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section>
+      <h2>Data is a channel too</h2>
+      <p>
+        Every analysis the server resolves is stored as verified, provenance-tagged data. Published
+        properly, that becomes a resource other people can use without touching our software at all,
+        and it is arguably the more durable contribution.
+      </p>
+      <p>
+        We surveyed what already exists for Tamil on the main model-sharing platform. There is a good
+        deal of speech data, raw text and sentiment corpora. There is <b>no morphological
+        segmentation gold set, no loanword-to-equivalent dataset, and no origin-label dataset.</b>
+        Those three are precisely what this project produces as a by-product, which is either a happy
+        accident or the reason the project is shaped the way it is.
+      </p>
+      <p class="note">
+        Data published from a shared corpus needs a consent and licensing model before anyone else's
+        usage goes into it. Our own hosted instance is a different question from pooling other
+        people's installs, and the second one is deliberately not built.
+      </p>
+    </section>
+
+    <section>
+      <h2>What this costs, and why that shapes the plan</h2>
+      <p>
+        A server other people run costs us nothing. A service we host for everyone costs money every
+        month, forever, and this is a nonprofit with volunteer time as its scarcest resource.
+      </p>
+      <p>
+        So the order is deliberate: everything that is free to us ships first, and the hosted service
+        follows once there is reason to believe people want it. Adoption is the goal.
+        Self-hostable and open-source is also the exit: if this project ever stops, a university or
+        a school can keep running it without asking anyone.
+      </p>
+      <p class="onward"><a href="/horizon">And where it goes after that &rarr;</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(30px, 4.6vw, 46px); line-height: 1.15; margin: 12px 0 0; }
+  .pagehead h1 .en { font-family: var(--ui); font-size: 17px; color: var(--muted);
+    font-weight: 400; margin-left: 12px; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+
+  .who { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 24px 0 0; }
+  .w { background: var(--card); padding: 15px 17px; }
+  .wt { font-family: var(--ui); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin: 0; }
+  .wd { font-size: 14.5px; margin: 9px 0 0; line-height: 1.5; }
+
+  .rungs { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .rung { border: 1px solid var(--line); border-left: 5px solid var(--line); background: var(--card);
+    padding: 15px 18px; }
+  .rung.st-done { border-left-color: var(--ok); }
+  .rung.st-partial { border-left-color: var(--ochre); }
+  .rung.st-open { border-left-color: var(--muted); }
+  .rn { font-family: var(--ui); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin: 0; }
+  .rt { font-size: 18px; font-weight: 600; margin: 6px 0 0; }
+  .rw { margin: 8px 0 0; font-size: 15px; }
+  .rc { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+</style>

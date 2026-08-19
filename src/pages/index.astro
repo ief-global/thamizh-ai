@@ -109,14 +109,14 @@ const pages = {
       <p class="grouplab">Core</p>
       <div class="map">
         {pages.core.map(([path, q]) => (
-          <div class="pg"><p class="path">{path}</p><p class="q ta">{q}</p></div>
+          <a class="pg" href={path}><p class="path">{path}</p><p class="q ta">{q}</p></a>
         ))}
       </div>
 
       <p class="grouplab">One page per source</p>
       <div class="map">
         {pages.sources.map(([path, q]) => (
-          <div class="pg"><p class="path">{path}</p><p class="q ta">{q}</p></div>
+          <a class="pg" href={path}><p class="path">{path}</p><p class="q ta">{q}</p></a>
         ))}
       </div>
     </section>
@@ -177,7 +177,9 @@ const pages = {
     text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 26px 0 10px; }
   .map { display: grid; grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
     gap: 1px; background: var(--line); border: 1px solid var(--line); }
-  .pg { background: var(--card); padding: 15px 17px; }
+  .pg { background: var(--card); padding: 15px 17px; display: block; text-decoration: none;
+    color: var(--ink); }
+  .pg:hover { background: var(--sunk); }
   .pg .path { font-family: var(--mono); font-size: 12.5px; color: var(--accent2);
     font-weight: 600; overflow-wrap: anywhere; margin: 0; }
   .pg .q { font-size: 14px; color: var(--muted); margin: 6px 0 0; line-height: 1.45; }

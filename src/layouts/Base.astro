@@ -10,15 +10,23 @@ interface Props {
 }
 const { title, description, derivesFrom = [], noindex = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-// `ready: false` sections are written but not built yet. They render as plain text rather
-// than as dead links, because a 404 on a site asking scholars for their trust is a bad look.
+// Flip to false while the Tamil pages are still being read, or before any page that is
+// written but not yet published. One switch, so it cannot be half-done.
+const DRAFT = true;
+
 const nav = [
-  { href: '/why', label: 'Why', ready: true },
-  { href: '/grammar', label: 'Grammar', ready: true },
-  { href: '/morphology', label: 'Morphology', ready: true },
-  { href: '/engine', label: 'Engine', ready: true },
-  { href: '/sources', label: 'Sources', ready: true },
-  { href: '/horizon', label: 'Horizon', ready: false },
+  { href: '/why', label: 'Why' },
+  { href: '/grammar', label: 'Grammar' },
+  { href: '/morphology', label: 'Morphology' },
+  { href: '/engine', label: 'Engine' },
+  { href: '/sources', label: 'Sources' },
+  { href: '/distribution', label: 'Distribution' },
+  { href: '/horizon', label: 'Horizon' },
+];
+const subnav = [
+  { href: '/status', label: 'Status' },
+  { href: '/glossary', label: 'Glossary' },
+  { href: '/about', label: 'About and contact' },
 ];
 ---
 <!doctype html>
@@ -36,17 +44,18 @@ const nav = [
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <div class="draft"><div class="wrap">
-    <b>Draft</b> &nbsp;·&nbsp; this site is being written in the open. Figures are verified; the prose is not final.
-  </div></div>
+  {DRAFT && (
+    <div class="draft"><div class="wrap">
+      <b>Draft</b> &nbsp;·&nbsp; this site is being written in the open. Every figure is verified; the
+      prose is still being read. <a href="/about">Tell us what is wrong</a>.
+    </div></div>
+  )}
 
   <div class="topbar"><div class="wrap row">
     <a class="brand ta" href="/">தமிழ்<span class="ai">AI</span></a>
     <nav aria-label="Sections">
       {nav.map((n) => (
-        n.ready
-          ? <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a>
-          : <span class="soon" title="Being written">{n.label}</span>
+        <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a>
       ))}
     </nav>
   </div></div>
@@ -56,6 +65,11 @@ const nav = [
   </main>
 
   <footer class="site"><div class="wrap">
+    <nav class="subnav" aria-label="More">
+      {subnav.map((n) => (
+        <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a>
+      ))}
+    </nav>
     {derivesFrom.length > 0 && (
       <p class="derives">
         This page derives from {derivesFrom.map((d, i) => (
