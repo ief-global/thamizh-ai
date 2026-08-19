@@ -77,7 +77,8 @@ src/
 public/
   fonts/                   Noto Sans Tamil, self-hosted. No third-party font CDN.
   img/CREDITS.md           every image, its licence and its source
-scripts/measure-tokens.py  regenerates src/data/tokenization.json
+scripts/                   sync-grammar.py, sync-sources.py, sync-glossary.py copy verified
+                           material out of the sibling repos; measure-tokens.py measures
 ```
 
 ## Two rules that keep this honest
@@ -86,6 +87,9 @@ scripts/measure-tokens.py  regenerates src/data/tokenization.json
    was verified and a link to `CODE-STATUS.md`. When the server's numbers change, this file changes
    in the same session.
 2. **Every page names the document it derives from**, in its own footer.
+3. **No நூற்பா, source grade or glossary entry is typed by hand.** The sync scripts copy them out of
+   the other two repos, because a transcription drifts within minutes of being read and the drift is
+   invisible. Run them, do not edit their output.
 
 ## Contributing
 

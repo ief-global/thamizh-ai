@@ -50,6 +50,18 @@ govern the design repo govern this one, and two more besides.
 `src/data/tokenization.json` is our own measurement, not a quotation. Regenerate it with
 `scripts/measure-tokens.py` rather than editing it, and update `measured_on` when you do.
 
+**Four data files are generated. Do not hand-edit any of them.**
+
+| File | Script | Copies from |
+|---|---|---|
+| `src/data/grammar.json` | `scripts/sync-grammar.py` | `thamizh-mcp/data/grammar/` — நூற்பா, cited verbatim |
+| `src/data/sources.json` | `scripts/sync-sources.py` | `thamizh-mcp/data/sources.json` — the source registry |
+| `src/data/glossary.json` | `scripts/sync-glossary.py` | `thamizh-mcp-design/Glossary.md` — the quick-reference table |
+| `src/data/tokenization.json` | `scripts/measure-tokens.py` | measured here, with `tiktoken` |
+
+Each script exits quietly when the sibling repo is missing, so a CI build never depends on a
+checkout it does not have. Re-run all three syncs after pulling either sibling repo.
+
 ## Design
 
 Tokens in `src/styles/tokens.css` mirror `BRAND.md` in the design repo. Change that file first.
@@ -84,9 +96,11 @@ laptop: `main` is the deploy branch and the dashboard is the only thing that sho
 
 ## Gotchas
 
-- Nav entries and layer names for pages that are not built yet render as **plain text, not links**
-  (`ready` flags in `Base.astro` and `LayerStack.astro`). Flip the flag when the page ships, and
-  check `dist/` for dead internal links before pushing.
+- **`const DRAFT` in `Base.astro`** shows or hides the draft banner. One switch, so it cannot be
+  half-done. It comes off when Saran has read the Tamil, not before.
+- `LayerStack.astro` carries a `ready` set: a layer whose page does not exist yet renders as plain
+  text rather than a dead link. Add the id when the page ships. Check `dist/` for dead internal
+  links before pushing; CI fails on one anyway.
 - `build.format: 'file'`, so `src/pages/ta/index.astro` builds to `/ta.html`. Cloudflare's
   `html_handling: auto-trailing-slash` serves that at `/ta`. Keep the two settings in step: changing
   Astro's `trailingSlash` or `format` without changing `wrangler.jsonc` silently breaks every URL.

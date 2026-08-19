@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+
+const stages = [
+  { id: 'A', name: 'Word in context', done: false,
+    what: 'Take a sentence, split it into words, and choose the right analysis for each one in context rather than returning every possibility.',
+    why: 'Tamil surface forms are massively ambiguous in isolation and context resolves most of it. Nothing further is possible without this.' },
+  { id: 'B', name: 'Structure', done: false,
+    what: 'Parse the sentence: which word governs which.',
+    why: 'It lets us ask what grammatical slot comes next, rather than what token comes next.' },
+  { id: 'C', name: 'The realizer', done: false,
+    what: 'Give it a lemma and a bundle of grammatical features, get back the correct surface form. Join words with the right புணர்ச்சி.',
+    why: 'This needs no training at all. The transducer already runs in this direction and we simply do not use it. Highest value for the least work in this whole list.' },
+  { id: 'D', name: 'The validator', done: false,
+    what: 'Check Tamil that something else produced: is every form parseable, does agreement hold, is case government right? Return corrections with the rule that was broken.',
+    why: 'This is a Tamil grammar checker, and it is plausibly wanted by more people than the analyser is.' },
+  { id: 'E', name: 'The first predictor', done: false,
+    what: 'De-agglutinate a corpus into sequences of meaningful units, then train a modest model over those units to predict the next one.',
+    why: 'Laptop scale, no specialised hardware, weeks rather than months. It is a Tamil next-word predictor that reasons over morphemes rather than fragments.' },
+  { id: 'F', name: 'Tokenizer, then a model', done: false,
+    what: 'A tokenizer whose units are morphemes, and then a small Tamil model trained with it.',
+    why: 'The segmentation data that trains the tokenizer is what the server has been accumulating since the beginning.' },
+];
+---
+<Base
+  title="The horizon"
+  description="From a word analyser to a Tamil-native model: the stages, the flywheel that feeds them, and the two questions we have to settle first."
+  derivesFrom={[
+    { label: 'DESIGN.md §8', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+    { label: 'DECISIONS.md D-006', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">Horizon</p>
+      <h1 class="ta">தமிழ் மொழி மாதிரி <span class="en">a Tamil-native model</span></h1>
+      <p class="lede">
+        Written down so that today's choices do not accidentally rule it out. <b>None of this is
+        scheduled</b>, and this page would be dishonest if it read like a plan.
+      </p>
+    </header>
+
+    <section>
+      <h2>Why data, and not a bigger model</h2>
+      <p>
+        Tamil is short of machine-readable linguistic data rather than of literature. So the useful
+        move is to make the missing data, and the way to make it without funding a labelling project
+        is to produce it as a by-product of something people already want.
+      </p>
+      <p>
+        Every analysis the server resolves is stored with its sources and the date. Verified,
+        provenance-tagged, and growing whenever anyone uses the tool.
+      </p>
+
+      <ol class="flywheel">
+        <li><b>Somebody asks</b> about a Tamil word.</li>
+        <li><b>The engine answers</b> from cited sources, or returns an honest gap.</li>
+        <li><b>The answer is stored</b> with every claim's provenance attached.</li>
+        <li><b>Curation</b> separates verified from generated from disputed, and drops anything a licence will not let us publish.</li>
+        <li><b>Published datasets</b> of exactly the kinds that do not currently exist for Tamil.</li>
+        <li><b>Better Tamil tooling</b>, ours and other people's, which brings more use, which returns to step one.</li>
+      </ol>
+      <p class="src">
+        The eval fixtures are flagged in the store so they can never leak into a published dataset. A
+        benchmark is worth nothing once the thing being measured has read it.
+      </p>
+    </section>
+
+    <section>
+      <h2>Predicting the next Tamil word is three problems</h2>
+      <p>Only one of them actually needs a trained model, which is the observation this whole section rests on:</p>
+      <div class="three">
+        <div class="p3"><p class="pq">Which idea comes next?</p><p class="pa">Meaning and discourse. This genuinely needs a trained model.</p></div>
+        <div class="p3"><p class="pq">What grammatical shape must it take?</p><p class="pa">Agreement, case government, tense chaining. Largely rule-governed, and classical grammar plus a treebank cover most of it.</p></div>
+        <div class="p3"><p class="pq">What string is that, exactly?</p><p class="pa">Inflection and <span class="ta">புணர்ச்சி</span>. Fully deterministic, and we already own the machinery.</p></div>
+      </div>
+      <p>
+        So the target is not a Tamil model that does everything. It is a pairing: a large model
+        proposes a word and its grammatical features, and this engine turns that into correct Tamil.
+        The hard, error-prone morphology gets handled by rules that cannot hallucinate.
+      </p>
+    </section>
+
+    <section>
+      <h2>The stages</h2>
+      <p>
+        Each one is independently useful, and each is a prerequisite for the next. If the last stage
+        never happens, everything before it still stands on its own.
+      </p>
+      <ol class="stages">
+        {stages.map((s) => (
+          <li class="stage">
+            <p class="sid">{s.id}</p>
+            <div>
+              <p class="sn">{s.name}</p>
+              <p class="sw ta">{s.what}</p>
+              <p class="sy">{s.why}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p class="note">
+        <b>Stage C before stage E, always.</b> A predictor without a realizer just produces more
+        fragmented output, which is the problem we started with.
+      </p>
+    </section>
+
+    <section>
+      <h2>The cheap experiment that would settle it</h2>
+      <p>
+        Before committing to any of the expensive stages, there is a few days of work that would tell
+        us whether the whole thesis holds: take Tamil Wikipedia, split it into morphemes with the
+        analyser we already have, then train two small models, one over ordinary tokens and one over
+        morphemes, and compare how well each predicts the next unit.
+      </p>
+      <p>
+        If morphemes win clearly, the long-term argument is proved and it is a publishable result
+        nobody has produced. If they do not, we have saved a year. It is the highest information per
+        hour available to this project, and it needs no funding.
+      </p>
+    </section>
+
+    <section>
+      <h2>Two questions we have to answer before any of this</h2>
+      <dl class="landmines">
+        <dt>Honest gaps do not survive generation</dt>
+        <dd class="ta">
+          "No attested analysis" is a fine answer for an analyser. In the middle of a sentence it is
+          not, because something has to be produced. Refuse the whole sentence? Emit with a
+          confidence flag? Fall back and mark it ungrounded? Whichever we choose, choosing it late
+          means the honesty rule erodes quietly rather than being changed on purpose.
+        </dd>
+        <dt>Rule-attested is not source-attested</dt>
+        <dd class="ta">
+          A realizer necessarily produces correct Tamil forms that no dictionary has ever recorded.
+          That is fine, and it is a different kind of evidence from a word somebody attested. The
+          rule against inventing words has to be scoped narrowly to <b>coining a new word</b>, or it
+          will accidentally forbid inflecting an existing one.
+        </dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>When this becomes real</h2>
+      <p>
+        There is a written trigger, so the decision is not made on enthusiasm: roughly a hundred
+        thousand verified records in the corpus, <b>and</b> evaluation that runs as routine rather
+        than as an event. Until both hold, this stays where it is.
+      </p>
+      <p>
+        Everything on <a href="/status">the current status page</a> is what produces those two
+        conditions. That is the actual relationship between the near work and the far work, and it is
+        why the far work is not being solutioned now.
+      </p>
+      <p class="onward"><a href="/sources">What we still need to get there &rarr;</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(26px, 4.2vw, 42px); line-height: 1.15; margin: 12px 0 0; }
+  .pagehead h1 .en { font-family: var(--ui); font-size: 17px; color: var(--muted);
+    font-weight: 400; margin-left: 12px; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .src { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+
+  .flywheel { margin: 22px 0 0; padding-left: 22px; max-width: var(--measure); }
+  .flywheel li { margin: 9px 0; }
+
+  .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 22px 0 0; }
+  .p3 { background: var(--card); padding: 15px 17px; }
+  .pq { margin: 0; font-size: 16px; font-weight: 600; color: var(--accent2); }
+  .pa { margin: 9px 0 0; font-size: 14.5px; color: var(--muted); line-height: 1.5; }
+
+  .stages { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .stage { display: grid; grid-template-columns: 46px 1fr; gap: 16px; border: 1px solid var(--line);
+    border-left: 5px solid var(--accent2); background: var(--card); padding: 15px 18px; }
+  .sid { font-family: var(--ui); font-size: 26px; font-weight: 700; color: var(--line); margin: 0; line-height: 1; }
+  .sn { font-size: 18px; font-weight: 600; margin: 0; }
+  .sw { margin: 8px 0 0; font-size: 15px; }
+  .sy { margin: 8px 0 0; font-size: 14px; color: var(--muted); font-family: var(--ui); line-height: 1.5; }
+
+  .landmines dt { font-family: var(--ui); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--warn); font-weight: 600; margin-top: 24px; }
+  .landmines dd { margin: 10px 0 0; max-width: var(--measure); }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+</style>

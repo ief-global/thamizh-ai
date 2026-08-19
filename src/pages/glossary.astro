@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import gl from '../data/glossary.json';
+---
+<Base
+  title="Glossary"
+  description="Computational linguistics vocabulary mapped onto Tamil grammar terms, for readers who know வேற்றுமை and விகுதி and have no reason to know 'lemma' or 'FST'."
+  derivesFrom={[
+    { label: 'Glossary.md', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/Glossary.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">Reference</p>
+      <h1>Two vocabularies for the same thing</h1>
+      <p class="lede">
+        Computational linguistics and Tamil grammar describe much of the same territory in different
+        words, and neither field learned the other's. This table is the map between them.
+      </p>
+    </header>
+
+    <section>
+      <p>
+        It is written for a reader who knows <span class="ta">வேற்றுமை</span> and
+        <span class="ta"> விகுதி</span> and has no reason to know "lemma" or "finite-state
+        transducer". It works in the other direction too, for an engineer who knows the technical
+        terms and is meeting <span class="ta">பகுபத உறுப்பு</span> for the first time.
+      </p>
+      <p class="note">
+        <b>The mapping is close, not exact.</b> Some technical terms have no clean Tamil equivalent,
+        and some Tamil categories have nothing to map onto. <span class="ta">திணை</span>, the
+        rational and non-rational distinction, is the standing example: it is central to Tamil
+        agreement and the international standard for annotating grammar cannot express it. The full
+        document lists those mismatches, and they are the interesting part.
+      </p>
+
+      <div class="scroll-x">
+        <table class="plain gl">
+          <thead><tr><th>Technical term</th><th>Nearest Tamil concept</th><th>In one line</th></tr></thead>
+          <tbody>
+            {gl.rows.map((r: { term: string; tamil: string; gloss: string }) => (
+              <tr>
+                <td class="t">{r.term}</td>
+                <td class="ta ty">{r.tamil}</td>
+                <td class="ta muted">{r.gloss}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="src">
+        {gl.rows.length} terms, copied {gl.synced_on} from the project's
+        <a href={gl.source}> full glossary</a> by <code>scripts/sync-glossary.py</code>. The full
+        version explains each one properly and works two examples end to end.
+      </p>
+    </section>
+
+    <section>
+      <h2>Three that cause the most trouble</h2>
+      <dl class="tricky">
+        <dt>Lemma, stem and root</dt>
+        <dd>
+          Three different things that get used interchangeably, and Tamil grammar slices them
+          differently again. For <span class="ta">மரத்தில்</span> the lemma is
+          <span class="ta"> மரம்</span>, the dictionary headword. The stem is
+          <span class="ta"> மரத்-</span>, which is what the suffix attaches to. The root is a
+          historical claim about a word family. A tool that conflates them will confidently return
+          the wrong one.
+        </dd>
+        <dt>Token</dt>
+        <dd>
+          In this field a token is whatever unit a model happens to count, which is usually
+          <b> not</b> a word and often not even a syllable. Almost every claim about how much text a
+          model can hold depends on this, and for Tamil the answer is unflattering. That is the
+          subject of <a href="/why">why this project exists</a>.
+        </dd>
+        <dt>Gold, silver and disputed</dt>
+        <dd>
+          Data that has been verified, data that has been generated and looks right, and data where
+          the sources genuinely disagree. Keeping them apart is what makes a corpus worth training
+          on. Collapsing them is how a plausible error becomes permanent.
+        </dd>
+      </dl>
+      <p class="onward"><a href="/morphology">Where these terms get used &rarr;</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(28px, 4.4vw, 44px); line-height: 1.15; margin: 12px 0 0; max-width: 20ch; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  table.gl { min-width: 620px; margin-top: 24px; }
+  .gl .t { font-family: var(--ui); font-weight: 600; font-size: 14.5px; white-space: nowrap; }
+  .gl .ty { font-size: 16px; }
+  .src { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+  .src code, code { font-family: var(--mono); font-size: .92em; }
+  .tricky { margin: 20px 0 0; }
+  .tricky dt { font-family: var(--ui); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-top: 22px; }
+  .tricky dd { margin: 10px 0 0; max-width: var(--measure); }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+</style>

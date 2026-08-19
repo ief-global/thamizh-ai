@@ -1,0 +1,150 @@
+---
+import Base from '../layouts/Base.astro';
+import StatusStrip from '../components/StatusStrip.astro';
+import status from '../data/status.json';
+const f = status.figures;
+
+const working = [
+  ['Nine tools, live', 'Origin, root, meaning, formation, grammar, equivalents, and the two that grow the cache. All over one engine.'],
+  ['Provenance on every claim', 'Each field carries its source, that source’s evidential grade, and when it was retrieved.'],
+  ['நூற்பா quoted at answer time', 'Grammar claims quote the verse from the pinned editions rather than naming a chapter.'],
+  ['Honest gaps', 'A field no source can ground comes back as a gap. Nothing is filled in to look complete.'],
+  ['Four front doors', 'MCP for assistants, REST for apps, a browser page, and a command line. The browser page needed no engine changes.'],
+  ['Open source, under a nonprofit', 'Apache-2.0. Anyone may run it, and nothing is built on it commercially by us.'],
+];
+---
+<Base
+  title="Where this honestly stands"
+  description="What works today, what does not, and the measured numbers behind both."
+  derivesFrom={[
+    { label: 'CODE-STATUS.md', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">Status</p>
+      <h1>Where this honestly stands</h1>
+      <p class="lede">
+        Every number on this site comes from one file, with the date it was checked. This page is
+        that file, read out. If something here is stale, the fault is ours and worth telling us
+        about.
+      </p>
+    </header>
+
+    <div class="statwrap"><StatusStrip /></div>
+
+    <section>
+      <h2>What works</h2>
+      <dl class="works">
+        {working.map(([h, d]) => (<><dt>{h}</dt><dd class="ta">{d}</dd></>))}
+      </dl>
+    </section>
+
+    <section>
+      <h2>The measurement, in full</h2>
+      <p>
+        A sweep of {f.sweep_words} everyday words, re-run against the live build. It is the only
+        honest read on quality we have, and the expected answers inside it are our own assessments
+        rather than an authority, so a Tamil reader disagreeing with one of them is useful to us.
+      </p>
+      <div class="scroll-x">
+        <table class="plain m">
+          <thead><tr><th>What</th><th class="n">Result</th><th>Reading</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Origin classified correctly</td>
+              <td class="n big ok">{f.origin_correct}<span class="of">/{f.sweep_words}</span></td>
+              <td class="muted">Where the word came from, decided from orthography, the native parse and attestation.</td>
+            </tr>
+            <tr>
+              <td>Returned an honest <code>unknown</code></td>
+              <td class="n big warn">{f.origin_unknown}</td>
+              <td class="muted">Mostly modern loans absent from every source we hold. A gap, not an error.</td>
+            </tr>
+            <tr>
+              <td>Wrong</td>
+              <td class="n big bad">{f.origin_wrong}</td>
+              <td class="muted">One word. We know which one, and it is in the sweep output rather than hidden.</td>
+            </tr>
+            <tr>
+              <td>Formation decoded</td>
+              <td class="n big">{f.formation_decoded}<span class="of">/{f.formation_in_scope}</span></td>
+              <td class="muted">Of the words in scope for பகுபத உறுப்பிலக்கணம். The rest are non-finite forms.</td>
+            </tr>
+            <tr>
+              <td>Automated tests</td>
+              <td class="n big">{f.tests}</td>
+              <td class="muted">{f.tests_note}. They include a check that every cited நூற்பா resolves in the pinned text, verbatim.</td>
+            </tr>
+            <tr>
+              <td>Classical verses pinned</td>
+              <td class="n big">{f.classical_verses.tholkappiyam + f.classical_verses.nannul}</td>
+              <td class="muted">தொல்காப்பியம் {f.classical_verses.tholkappiyam} · நன்னூல் {f.classical_verses.nannul}, checksummed.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="src">Verified {status.verified_on}. Source: <a href={status.source}>CODE-STATUS.md</a>.</p>
+    </section>
+
+    <section>
+      <h2>What is not done</h2>
+      <ul class="gaps">{status.not_done.map((n: string) => <li class="ta">{n}</li>)}</ul>
+      <p class="note">
+        <b>Nothing has been released yet.</b> The version number is still 0.1.0 and no installable
+        artifact exists, so at the moment the only way to run this is to clone it. That is the single
+        biggest gap on this list, and it is <a href="/distribution">the distribution problem</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Debts we say out loud</h2>
+      <dl class="works">
+        <dt>Sandhi joins are sometimes unnamed</dt>
+        <dd class="ta">
+          Where no confident classical rule fires, the join is left unnamed rather than guessed. That
+          is correct behaviour and it is below the standard the product should eventually meet.
+        </dd>
+        <dt>Origin is unknown more often than we would like</dt>
+        <dd class="ta">
+          Orthography can prove a word is not native. It can never say which language it came from.
+          The remaining unknowns mostly need a lexicon we do not have.
+        </dd>
+        <dt>One word list has no licence</dt>
+        <dd class="ta">
+          It is graded D, declared in every answer that rests on it, and named on
+          <a href="/sources"> the sources page</a>. The fix is an authenticated glossary, not a
+          better disclaimer.
+        </dd>
+        <dt>The lift has not been measured</dt>
+        <dd class="ta">
+          Whether a model actually answers Tamil questions better with these tools attached is the
+          number that would justify the project, and we do not have it yet. We will publish it
+          whichever way it comes out.
+        </dd>
+      </dl>
+      <p class="onward"><a href="/horizon">What comes after this &rarr;</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(28px, 4.4vw, 44px); line-height: 1.15; margin: 12px 0 0; max-width: 18ch; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .statwrap { margin: 32px 0 0; }
+  .works { display: grid; grid-template-columns: minmax(190px, 260px) 1fr; gap: 1px;
+    background: var(--line); border: 1px solid var(--line); margin: 22px 0 0; }
+  .works dt { background: var(--card); padding: 13px 16px; font-weight: 600; font-size: 15px; }
+  .works dd { background: var(--card); padding: 13px 16px; margin: 0; font-size: 15px; color: var(--muted); }
+  table.m { min-width: 640px; margin-top: 20px; }
+  .m .big { font-size: 22px; font-weight: 600; }
+  .m .of { font-size: 15px; color: var(--muted); font-weight: 400; }
+  .m .ok { color: var(--ok); } .m .warn { color: var(--warn); } .m .bad { color: var(--accent); }
+  .src { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+  code { font-family: var(--mono); font-size: .92em; }
+  .gaps { margin: 16px 0 0; padding-left: 20px; max-width: var(--measure); color: var(--muted); }
+  .gaps li { margin: 7px 0; }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+  @media (max-width: 620px) { .works { grid-template-columns: 1fr; } }
+</style>

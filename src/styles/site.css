@@ -55,7 +55,10 @@ section { margin: clamp(54px, 9vh, 92px) 0 0; }
 .topbar nav { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-left: auto; }
 .topbar nav a { color: var(--muted); text-decoration: none; }
 .topbar nav a:hover, .topbar nav a[aria-current="page"] { color: var(--accent); }
-.topbar nav .soon { color: var(--muted); opacity: .5; }
+footer.site .subnav { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0 0 20px;
+  padding-bottom: 18px; border-bottom: 1px solid var(--line); font-size: 14px; }
+footer.site .subnav a { color: var(--accent); text-decoration: none; }
+footer.site .subnav a:hover, footer.site .subnav a[aria-current="page"] { text-decoration: underline; }
 
 .draft {
   background: var(--sunk); border-bottom: 1px solid var(--line);

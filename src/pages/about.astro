@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="About and contact"
+  description="Who is building this, under what licence, how to send a correction, and when this site will be archived."
+  derivesFrom={[
+    { label: 'the design repo', href: 'https://github.com/ief-global/thamizh-mcp-design' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">About</p>
+      <h1>Who is doing this, and how to reach them</h1>
+      <p class="lede">
+        A project of the <a href="https://ief-global.org">International Educational Foundation</a>, a
+        nonprofit. Free, open source, and not built on top of anything commercial.
+      </p>
+    </header>
+
+    <section>
+      <h2>Write to us</h2>
+      <p class="contact"><a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a></p>
+      <p>
+        Corrections from Tamil scholars and teachers are the most valuable thing this project can
+        receive, and they are wanted more than praise is.
+      </p>
+      <ul class="want">
+        <li><b>A grammar claim that is wrong</b>, or cited to the wrong <span class="ta">நூற்பா</span>. Naming the verse you would cite instead turns a complaint into a fix.</li>
+        <li><b>A place where we cite Nannūl and Tholkappiyam covers the ground</b>, or the reverse. The ordering rule is easy to state and easy to drift from.</li>
+        <li><b>A question your students actually ask</b>, so we can test against it rather than against what we imagined.</li>
+        <li><b>Access to a source</b> on <a href="/sources">the sources page</a>, or a pointer to whoever holds it.</li>
+      </ul>
+      <p>
+        Anything about the linguistics is best raised in
+        <a href="https://github.com/ief-global/thamizh-mcp-design">the design repository</a>, where
+        the argument is kept in public and the decision log records why each choice was made. Email
+        works just as well if that is not your world.
+      </p>
+    </section>
+
+    <section>
+      <h2>Where the work lives</h2>
+      <dl class="repos">
+        <dt><a href="https://github.com/ief-global/thamizh-mcp">thamizh-mcp</a></dt>
+        <dd>The server. Code, tests, the pinned classical texts, the cited grammar tables. Apache-2.0.</dd>
+        <dt><a href="https://github.com/ief-global/thamizh-mcp-design">thamizh-mcp-design</a></dt>
+        <dd>The reasoning. Design, decision log, glossary, source provenance, roadmap. <b>Authoritative</b>: where this site and that repository disagree, that repository is right and this site needs fixing.</dd>
+        <dt><a href="https://github.com/ief-global/thamizh-ai">thamizh-ai</a></dt>
+        <dd>This site. A view of the other two, never a fork.</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>This site has an end date</h2>
+      <p>
+        It exists because there is nothing public to use yet. When the analyser goes live at this
+        address, the tool should speak for itself and this material becomes history.
+      </p>
+      <p>
+        So do not bookmark these pages expecting to come back to them for years. Old links will
+        redirect to the working tool rather than breaking, and the pages will be archived as a
+        tagged release. If you are citing this project in writing, cite
+        <a href="https://github.com/ief-global/thamizh-mcp-design"> the design repository</a>, which
+        is the address that still resolves in five years.
+      </p>
+    </section>
+
+    <section>
+      <h2>Licences</h2>
+      <dl class="repos">
+        <dt>The writing and diagrams here</dt>
+        <dd><a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Quote it, translate it, correct it, teach from it. Keep the licence and say where it came from.</dd>
+        <dt>The code</dt>
+        <dd>Apache-2.0, both the server and this site.</dd>
+        <dt>Classical texts</dt>
+        <dd>Quoted from the Project Madurai etexts, which grant free distribution provided their header travels with the text. Credit on <a href="/sources/project-madurai">their page</a>.</dd>
+        <dt>Morphological analysis</dt>
+        <dd>By <a href="/sources/thamizhimorph">ThamizhiMorph</a>, Sarveswaran, Dias and Butt 2021, Apache-2.0.</dd>
+        <dt>Typeface</dt>
+        <dd>Noto Sans Tamil, under the SIL Open Font License, served from this site rather than from a font network.</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Images</h2>
+      <p>
+        Everything on this site is public domain or CC0 and is credited on the page it appears on.
+        A project that asks people to check its sources does not run an uncredited photograph.
+      </p>
+      <ul class="want">
+        <li>
+          The <span class="ta">வட்டெழுத்து</span> inscription at the Brihadeeswara temple, Thanjavur.
+          CC0, by "deadrat", via
+          <a href="https://commons.wikimedia.org/wiki/File:Vattezhutthu_in_Thanjavur_Brihadeeswara_Temple.jpg">Wikimedia Commons</a>.
+        </li>
+        <li>
+          The palm-leaf manuscript of <span class="ta">தொல்காப்பியம்</span>. Public domain, uploaded
+          from the Tamil Virtual Academy's collection, via
+          <a href="https://commons.wikimedia.org/wiki/File:Tamil_palm-leaf_manuscript_of_Tolk%C4%81ppiyam.jpg">Wikimedia Commons</a>.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Privacy</h2>
+      <p>
+        These pages are static files. There is no account, no tracking, no analytics and no cookie,
+        and the typeface is served from here so that reading this page does not tell a third party
+        that you did.
+      </p>
+      <p>
+        When the analyser is public that will change in one specific way, and it is worth saying in
+        advance: <b>words looked up will be stored as linguistic data</b>, because that corpus is the
+        point of the project. That will be stated on the tool itself, not buried here.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(28px, 4.4vw, 44px); line-height: 1.15; margin: 12px 0 0; max-width: 20ch; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .contact { font-size: clamp(20px, 3vw, 26px); margin: 18px 0 0; }
+  .want { margin: 18px 0 0; padding-left: 20px; max-width: var(--measure); }
+  .want li { margin: 10px 0; }
+  .repos { display: grid; grid-template-columns: minmax(190px, 260px) 1fr; gap: 1px;
+    background: var(--line); border: 1px solid var(--line); margin: 22px 0 0; }
+  .repos dt { background: var(--card); padding: 13px 16px; font-weight: 600; font-size: 15px; }
+  .repos dd { background: var(--card); padding: 13px 16px; margin: 0; font-size: 15px; color: var(--muted); }
+  @media (max-width: 620px) { .repos { grid-template-columns: 1fr; } }
+</style>
