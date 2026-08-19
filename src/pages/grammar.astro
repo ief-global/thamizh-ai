@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+import Nurpa from '../components/Nurpa.astro';
+import g from '../data/grammar.json';
+
+const loc = g.case_locative;
+const inst = g.case_instrumental;
+---
+<Base
+  title="இலக்கணம், the authority layer"
+  description="Tholkappiyam first, Nannūl where Tholkappiyam does not codify the point. How a claim on this project names the நூற்பா behind it."
+  derivesFrom={[
+    { label: 'DESIGN.md §1', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+    { label: 'the grammar tables', href: 'https://github.com/ief-global/thamizh-mcp/tree/main/data/grammar' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">Layer 1</p>
+      <h1 class="ta">இலக்கணம் <span class="en">grammar</span></h1>
+      <p class="lede">
+        What makes an answer true here, and who says so. Every grammatical claim this project makes
+        names the authority behind it, down to the <span class="ta">நூற்பா</span>, from editions that
+        are pinned and checksummed.
+      </p>
+    </header>
+
+    <section>
+      <h2>Tholkappiyam first</h2>
+      <p>
+        <span class="ta">தொல்காப்பியம்</span> is the primary authority for word classes,
+        <span class="ta">வேற்றுமை</span> and <span class="ta">புணர்ச்சி</span>.
+        <span class="ta">நன்னூல்</span> is the fallback, and the primary only where Tholkappiyam does
+        not cover the ground. The clearest such place is the six-part
+        <span class="ta">பகுபத உறுப்பு</span> scheme, which Tholkappiyam does not enumerate.
+      </p>
+      <p>
+        The order is a design rule rather than a preference, and it has been tested once already.
+        Modern course books quote Nannūl far more often than Tholkappiyam, so a system built from
+        teaching material drifts toward Nannūl without anyone deciding to. Ours records which
+        authority each claim came from, so the drift shows up instead of settling in.
+      </p>
+      <p class="quotewhy">{g.source_priority.why}</p>
+    </section>
+
+    <section>
+      <h2>Where the authorities disagree, both are recorded</h2>
+      <p>
+        The third <span class="ta">வேற்றுமை</span> is the standing example. Tholkappiyam names one
+        <span class="ta">உருபு</span>. Nannūl names four, and splits the meanings differently.
+      </p>
+      <Nurpa authority={inst.authority.primary.text} ref={inst.authority.primary.ref}
+             verse={inst.authority.primary.verse} text={inst.authority.primary.nurpa} role="primary" />
+      <Nurpa authority={inst.authority.fallback.text}
+             verse={inst.authority.fallback.verse} text={inst.authority.fallback.nurpa} role="fallback" />
+      <p>
+        Both are true, so the table carries both and the answer says which one it used. Collapsing
+        them into one tidy list would be a small act of scholarship destroyed for the convenience of
+        a database schema.
+      </p>
+    </section>
+
+    <section>
+      <h2>The rules ship as cited data, not as code</h2>
+      <p>
+        Five tables live in the server as JSON: <span class="ta">இடைநிலை</span>,
+        <span class="ta">விகுதி</span>, <span class="ta">சாரியை</span>,
+        <span class="ta">வேற்றுமை உருபு</span> and <span class="ta">விகாரம்</span>. Each one carries a
+        <code>source_priority</code> block naming its authority, and the test suite fails if a table
+        is missing one. So the linguistics can be audited as data, by someone who never opens a
+        Python file.
+      </p>
+      <p>
+        Here is one real entry, the seventh <span class="ta">வேற்றுமை</span>, which is the case
+        <span class="ta">மரத்தில்</span> lands in. The <span class="ta">உருபு</span> list is open and
+        <span class="ta">கண்</span>-headed in both authorities:
+      </p>
+
+      <div class="entry">
+        <p class="ename ta">{loc.name}</p>
+        <p class="urubu ta">{loc.urubu.join(' · ')}</p>
+        <p class="unote ta">{loc.urubu_note}</p>
+      </div>
+      <Nurpa authority={loc.authority.primary.text} ref={loc.authority.primary.ref}
+             verse={loc.authority.primary.verse} text={loc.authority.primary.nurpa} role="primary" />
+      <Nurpa authority={loc.authority.fallback.text}
+             verse={loc.authority.fallback.verse} text={loc.authority.fallback.nurpa} role="fallback" />
+      <p class="src">
+        Verse text quoted from the pinned editions and copied here by
+        <code>scripts/sync-grammar.py</code>, never retyped. {g.attribution}
+      </p>
+    </section>
+
+    <section>
+      <h2>How a citation is written</h2>
+      <p>
+        <span class="ta">தொல்காப்பியம்</span> numbers restart at 1 in every
+        <span class="ta">இயல்</span> and collide across <span class="ta">இயல்</span> and
+        <span class="ta">அதிகாரம்</span>. A bare number is unusable, so it is always qualified.
+        <span class="ta">நன்னூல்</span> runs continuously from 1 to 462, so a bare number there is
+        unambiguous.
+      </p>
+      <pre class="cite ta">தொல்காப்பியம், சொல்லதிகாரம், வேற்றுமையியல், நூற்பா 3
+தொல்காப்பியம், எழுத்ததிகாரம், புணரியல், நூற்பா 7
+நன்னூல், நூற்பா 244</pre>
+      <p class="note">
+        <b>And never take a verse number from a secondary source, however accredited.</b> The Tamil
+        Virtual Academy course books quote Nannūl selectively and renumber: their 336, 319 and 136 are
+        <b>337, 320 and 137</b> in the pinned edition. All three were wrong in our tables before we
+        pinned the full texts, which is why the texts are now read at runtime rather than trusted from
+        a note.
+      </p>
+    </section>
+
+    <section>
+      <h2>What is not settled</h2>
+      <p>
+        A rule table records its own gaps, and they are published rather than smoothed over. Two
+        kinds. First, places where an authority simply does not print what we need:
+      </p>
+      <ul class="gaps">{g.known_gaps.map((k: string) => <li>{k}</li>)}</ul>
+      <p>
+        Second, claims the project has <b>derived</b> rather than found stated in a verse. Those are
+        marked as inferred and are not treated as authority until a verse is found or Saran rules on
+        them. One example, in its own words:
+      </p>
+      <p class="inferred ta">{g.inferred_vikaram}</p>
+      <p>Three questions are open on the concept map right now:</p>
+      <ul class="gaps">{g.open_review.map((k: string) => <li class="ta">{k}</li>)}</ul>
+      <p class="onward"><a href="/morphology">Then how a word comes apart &rarr;</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(30px, 4.6vw, 46px); line-height: 1.15; margin: 12px 0 0; }
+  .pagehead h1 .en { font-family: var(--ui); font-size: 17px; color: var(--muted);
+    font-weight: 400; margin-left: 12px; letter-spacing: .02em; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .quotewhy { border-left: 3px solid var(--line); padding-left: 16px; color: var(--muted);
+    font-size: 15.5px; }
+  .entry { border: 1px solid var(--line); background: var(--card); padding: 18px 20px; margin: 22px 0 0; }
+  .ename { font-size: 20px; font-weight: 600; margin: 0; }
+  .urubu { font-size: 18px; margin: 10px 0 0; line-height: 1.9; color: var(--accent2); max-width: none; }
+  .unote { font-size: 14.5px; color: var(--muted); margin: 12px 0 0; }
+  .cite { font-family: var(--ta); font-size: 15.5px; line-height: 1.9; background: var(--sunk);
+    padding: 16px 18px; overflow-x: auto; margin: 18px 0 0; border-left: 3px solid var(--accent2); }
+  .src { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+  .src code, p code { font-family: var(--mono); font-size: .92em; }
+  .gaps { margin: 16px 0 0; padding-left: 20px; max-width: var(--measure); color: var(--muted); }
+  .gaps li { margin: 9px 0; }
+  .inferred { border-left: 3px solid var(--warn); padding-left: 16px; font-size: 15.5px;
+    color: var(--muted); }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+</style>

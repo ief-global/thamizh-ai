@@ -1,0 +1,211 @@
+---
+import Base from '../layouts/Base.astro';
+import Nurpa from '../components/Nurpa.astro';
+import g from '../data/grammar.json';
+
+const v = g.six_parts_verse;
+
+// மரத்தில், the project's own eval fixture. Verified in the design repo's Glossary §8.1
+// and against the live build. One example, used once, as anatomy.
+const parts = [
+  { form: 'மரம்', role: 'பகுதி', en: 'stem', by: 'Nannūl' },
+  { form: 'அத்து', role: 'சாரியை', en: 'euphonic increment', by: 'Nannūl' },
+  { form: 'இல்', role: 'விகுதி', en: 'case suffix, 7th வேற்றுமை', by: 'Nannūl' },
+];
+---
+<Base
+  title="பகுபத உறுப்பிலக்கணம், the mechanism"
+  description="Tamil carries grammar inside the word. What computational linguists call morphology, Tamil grammar has called பகுபத உறுப்பிலக்கணம் for centuries."
+  derivesFrom={[
+    { label: 'Glossary.md', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/Glossary.md' },
+    { label: 'DESIGN.md §12', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">Layer 2</p>
+      <h1 class="ta">பகுபத உறுப்பிலக்கணம் <span class="en">morphology</span></h1>
+      <p class="lede">
+        How a Tamil word is taken apart, and why no dictionary can ever hold the answers. This is the
+        layer that does the work, and it only counts because layer 1 says what a correct answer is.
+      </p>
+    </header>
+
+    <section>
+      <h2>The same subject, two vocabularies</h2>
+      <p>
+        Morphology is the study of how a word is built out of smaller meaningful pieces. Tamil grammar
+        has had a name for that study, and a six-part analysis to go with it, for centuries. A
+        computational linguist and a <span class="ta">தமிழ்</span> teacher are looking at the same
+        thing and calling it different names.
+      </p>
+      <p>
+        The mapping is worth stating plainly, because it is what lets classical grammar drive modern
+        software: a <b>morpheme</b> is an <span class="ta">உறுப்பு</span>, a <b>lemma</b> is the
+        <span class="ta">அகராதி வடிவம்</span>, an <b>affix</b> is a
+        <span class="ta">விகுதி</span> or <span class="ta">இடைநிலை</span> or
+        <span class="ta">சாரியை</span>, and <b>sandhi</b> is <span class="ta">புணர்ச்சி</span>.
+        The full mapping is the project's
+        <a href="https://github.com/ief-global/thamizh-mcp-design/blob/main/Glossary.md">glossary</a>,
+        and it will get a page of its own here.
+      </p>
+    </section>
+
+    <section>
+      <h2>The verse the whole layer rests on</h2>
+      <Nurpa authority="Nannūl" verse={`நன்னூல் ${v.verse}`} text={v.text} role="stated" />
+      <p>
+        It names all six <span class="ta">உறுப்பு</span> and says that every
+        <span class="ta">பதம்</span> is completed by joining <b>whichever of the six it takes</b>.
+        That word, <span class="ta">ஏற்பவை</span>, is the part software gets wrong: a word takes the
+        parts that apply to it, so not all six appear in every word, and a system that expects six
+        slots will invent something to fill them.
+      </p>
+      <div class="six">
+        {g.six_parts.map((p: { tamil: string; english: string }) => (
+          <div class="part">
+            <p class="pt ta">{p.tamil}</p>
+            <p class="pe">{p.english}</p>
+          </div>
+        ))}
+      </div>
+      <p class="src">
+        Tholkappiyam does not enumerate these six, which is why Nannūl is primary here and the answer
+        says so. That is the whole of the fallback rule in one worked case.
+      </p>
+    </section>
+
+    <section>
+      <h2>One word, taken apart</h2>
+      <p>
+        <span class="ta">மரத்தில்</span>, "in the tree". One word in Tamil, three words in English,
+        and three <span class="ta">உறுப்பு</span> inside it. This is the only word example on the
+        site, and it is here as anatomy rather than as proof.
+      </p>
+
+      <div class="anatomy">
+        {parts.map((p, i) => (
+          <>
+            {i > 0 && <span class="plus">+</span>}
+            <div class="pc">
+              <p class="form ta">{p.form}</p>
+              <p class="role ta">{p.role}</p>
+              <p class="en">{p.en}</p>
+              <p class="by">{p.by}</p>
+            </div>
+          </>
+        ))}
+      </div>
+      <p class="sandhi ta">
+        புணர்ச்சி: <b>திரிதல்</b> — ம் → த் at the சந்தி, where மரம் meets அத்து.
+        <span class="by"> authority: Tholkappiyam, எழுத்ததிகாரம், புணரியல்</span>
+      </p>
+      <p>
+        Every label on that diagram carries the authority that names it, and the tool returns them the
+        same way. Where the analyser cannot determine a join, it leaves it unnamed. An invented split
+        is worse than no split, because a teacher would have to know the answer already to catch it.
+      </p>
+    </section>
+
+    <section>
+      <h2>Why a dictionary cannot do this</h2>
+      <p>
+        Tamil is agglutinative. Pieces chain onto a root, each one keeping its own identity, so one
+        word carries what English needs a phrase for. One verb root yields thousands of surface forms,
+        which means a fixed word list is out of date the moment somebody inflects something.
+      </p>
+      <p>
+        So the core of this project is a rule engine rather than a database. That is unusual for an
+        MCP server, and it is forced by the language: <b>Tamil words are generated, not listed.</b>
+      </p>
+    </section>
+
+    <section>
+      <h2>ThamizhiMorph does the analysis, and we did not rebuild it</h2>
+      <p>
+        The rules run on <b>ThamizhiMorph</b>, a finite-state morphological analyser and generator for
+        Tamil, published by <b>Sarveswaran, Dias and Butt</b> in <i>Machine Translation</i> 35:37–70
+        (2021) and released under Apache-2.0. We wrap it. Building a second one would have been a
+        worse use of the same years.
+      </p>
+      <p>Its own measured numbers, from the paper, on a 612-word textbook corpus:</p>
+      <div class="status">
+        <div class="stat"><div class="v">93.3<span class="of">%</span></div><div class="l">analysis coverage</div></div>
+        <div class="stat"><div class="v">100<span class="of">%</span></div><div class="l">right analysis, among successes</div></div>
+        <div class="stat"><div class="v">97.9<span class="of">%</span></div><div class="l">right lemma, among successes</div></div>
+      </div>
+      <p class="verified">
+        Source: Sarveswaran, Dias &amp; Butt 2021 · code at
+        <a href="https://github.com/sarves/thamizhi-morph">github.com/sarves/thamizhi-morph</a>
+      </p>
+
+      <h3 class="sub">The guesser FSTs are switched off, deliberately</h3>
+      <p>
+        ThamizhiMorph ships guesser transducers that will produce an analysis for a word the lexicon
+        has never seen. We do not use them. On <span class="ta">கொடு</span> a guesser returns the
+        lemma <span class="ta">கொடுத்</span>, which is a confident error, and a confident error is the
+        one failure mode this project exists to remove. A word the analyser genuinely does not know
+        goes to the enrichment loop and comes back as an honest gap.
+      </p>
+
+      <h3 class="sub">The same machine can build words, and that is the long road</h3>
+      <p>
+        A finite-state transducer runs in both directions. The one analysing
+        <span class="ta">மரத்தில்</span> into three pieces can also take a lemma and a set of
+        grammatical features and produce the correct surface form. We use one direction today.
+      </p>
+      <p>
+        The other direction is why a Tamil model becomes thinkable later: a system that knows
+        <i>what</i> to say can hand over a lemma plus features and receive correct Tamil, instead of
+        spelling out an inflected word it has only ever seen in fragments. That is
+        <a href="/#stack">the horizon</a>, and it is written down rather than scheduled.
+      </p>
+    </section>
+
+    <section class="join">
+      <p class="cl">Why the two layers need each other</p>
+      <p class="result">
+        The analyser can split a word. Only the <span class="ta">நூற்பா</span> can say the split is
+        right. Grammar without morphology is a book you cannot query; morphology without grammar is a
+        machine nobody has reason to believe.
+      </p>
+      <p class="onward"><a href="/engine">See what we built on top &rarr;</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(26px, 4.2vw, 42px); line-height: 1.15; margin: 12px 0 0; }
+  .pagehead h1 .en { font-family: var(--ui); font-size: 17px; color: var(--muted);
+    font-weight: 400; margin-left: 12px; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .sub { margin: 36px 0 0; color: var(--accent2); }
+  .src { font-family: var(--ui); font-size: 13px; color: var(--muted); margin-top: 16px; }
+
+  .six { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 24px 0 0; }
+  .part { background: var(--card); padding: 14px 16px; }
+  .pt { font-size: 19px; font-weight: 600; margin: 0; }
+  .pe { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin: 6px 0 0; line-height: 1.4; }
+
+  .anatomy { display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px; margin: 26px 0 0; }
+  .pc { border: 1px solid var(--line); border-left: 4px solid var(--accent2); background: var(--card);
+    padding: 14px 18px; flex: 1 1 180px; }
+  .pc .form { font-size: 28px; margin: 0; line-height: 1.3; }
+  .pc .role { font-size: 15px; color: var(--accent); margin: 6px 0 0; }
+  .pc .en { font-family: var(--ui); font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+  .pc .by { font-family: var(--ui); font-size: 11px; color: var(--muted); margin: 8px 0 0;
+    letter-spacing: .06em; text-transform: uppercase; }
+  .plus { align-self: center; font-size: 22px; color: var(--muted); }
+  .sandhi { margin: 20px 0 0; padding: 14px 18px; background: var(--sunk);
+    border-left: 3px solid var(--ochre); font-size: 16px; max-width: none; }
+  .sandhi .by { font-family: var(--ui); font-size: 12px; color: var(--muted); display: block;
+    margin-top: 6px; }
+
+  .join { border-top: 2px solid var(--accent); padding-top: 26px; }
+  .join .cl { font-family: var(--ui); font-size: 11px; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0; }
+  .join .result { font-size: clamp(18px, 2.3vw, 22px); line-height: 1.5; max-width: 52ch; margin: 14px 0 0; }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+</style>

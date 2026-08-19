@@ -14,9 +14,9 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 // than as dead links, because a 404 on a site asking scholars for their trust is a bad look.
 const nav = [
   { href: '/why', label: 'Why', ready: true },
-  { href: '/grammar', label: 'Grammar', ready: false },
-  { href: '/morphology', label: 'Morphology', ready: false },
-  { href: '/engine', label: 'Engine', ready: false },
+  { href: '/grammar', label: 'Grammar', ready: true },
+  { href: '/morphology', label: 'Morphology', ready: true },
+  { href: '/engine', label: 'Engine', ready: true },
   { href: '/sources', label: 'Sources', ready: false },
   { href: '/horizon', label: 'Horizon', ready: false },
 ];
