@@ -1,5 +1,6 @@
 ---
 import SourcePage from '../../layouts/SourcePage.astro';
+import Paper from '../../components/Paper.astro';
 ---
 <SourcePage
   title="Aalamaram"
@@ -19,6 +20,8 @@ import SourcePage from '../../layouts/SourcePage.astro';
     { label: 'DESIGN.md §4.2', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
   ]}
 >
+  <Paper id="aalamaram" />
+
   <section>
     <h2>What we would do with it</h2>
     <p>
@@ -65,10 +68,10 @@ import SourcePage from '../../layouts/SourcePage.astro';
       <a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a>
     </p>
     <p class="note">
-      Aalamaram shares its lineage with <a href="/sources/thamizhimorph">ThamizhiMorph</a>, which we
-      already depend on, and with <a href="/sources/ilakkanam">ILAKKANAM</a>, which is how we would
-      measure ourselves. A great deal of what makes Tamil computable comes from a small number of
-      people.
+      One of its authors also wrote <a href="/sources/thamizhimorph">ThamizhiMorph</a>, which we
+      depend on, and is senior author on <a href="/sources/ilakkanam">ILAKKANAM</a>, which is how we
+      would measure ourselves. A great deal of what makes Tamil computable comes from a small number
+      of people, and that is worth saying rather than quietly benefiting from.
     </p>
   </section>
 </SourcePage>

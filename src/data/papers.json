@@ -24,13 +24,22 @@
       "verified_against": "the DOI recorded in the server's own source registry"
     },
     "ilakkanam": {
-      "title": "From Phonemes to Meaning: Evaluating LLMs on Tamil",
-      "authors": "University of Jaffna",
+      "title": "From Phonemes to Meaning: Evaluating Large Language Models on Tamil",
+      "authors": "J. Varsha, Menan Velayuthan, S. Karunakaran, R. Nivethiga, Kengatharaiyer Sarveswaran",
       "venue": "arXiv:2511.12387",
       "year": "2025",
       "url": "https://arxiv.org/abs/2511.12387",
       "verified_on": "2026-08-19",
-      "verified_against": "the arXiv identifier recorded in DESIGN.md §12"
+      "verified_against": "the author's own publication list at sarves.github.io/publication.html"
+    },
+    "aalamaram": {
+      "title": "Aalamaram: A large-scale linguistically annotated treebank for the Tamil language",
+      "authors": "A. M. Abirami, W. Q. Leong, H. Rengarajan, D. Anitha, R. Suganya, H. Singh, Kengatharaiyer Sarveswaran, W. C. Tjhi, R. R. Shah",
+      "venue": "Proceedings of the 7th Workshop on Indian Language Data Resource and Evaluation (WILDRE), Turin",
+      "year": "2024",
+      "url": "https://aclanthology.org/2024.wildre-1.11/",
+      "verified_on": "2026-08-19",
+      "verified_against": "Sarveswaran's own publication list at sarves.github.io/publication.html"
     }
   }
 }
