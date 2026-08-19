@@ -1,5 +1,6 @@
 ---
 import SourcePage from '../../layouts/SourcePage.astro';
+import Paper from '../../components/Paper.astro';
 
 const suite = [
   { repo: 'thamizhi-morph', name: 'ThamizhiMorph', licence: 'Apache-2.0',
@@ -113,9 +114,10 @@ const suite = [
     </p>
     <p>
       The same group also co-authored <a href="/sources/aalamaram">Aalamaram</a>, the Tamil treebank
-      we have adopted and not yet obtained, and published work on tokenizers for under-represented
-      languages, which is the argument our own <a href="/why">why page</a> makes from the other end.
+      we have adopted and not yet obtained. And this, which is the argument our own
+      <a href="/why">why page</a> makes from the other end:
     </p>
+    <Paper id="gpe_coling2025" note="We show what English-trained tokenizers do to Tamil words. This paper shows that the damage starts before the algorithm runs, in how a character is decided, and proposes a tokenizer that keeps Tamil graphemes whole." />
   </section>
 
   <section>

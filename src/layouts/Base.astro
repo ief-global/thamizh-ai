@@ -10,9 +10,10 @@ interface Props {
 }
 const { title, description, derivesFrom = [], noindex = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-// Flip to false while the Tamil pages are still being read, or before any page that is
-// written but not yet published. One switch, so it cannot be half-done.
-const DRAFT = true;
+// Flip to true while a page is written but not ready to be read, or while Tamil is
+// awaiting review. One switch, so it cannot be half-done.
+// Off since 2026-08-19: Saran read the Tamil and the layer names are settled.
+const DRAFT = false;
 
 const nav = [
   { href: '/why', label: 'Why' },

@@ -1,0 +1,36 @@
+{
+  "_comment": "Papers this site cites. Every field verified against the ACL Anthology or arXiv record, never from a repository description or from memory. Add the date it was checked.",
+  "papers": {
+    "gpe_coling2025": {
+      "title": "Egalitarian Language Representation in Language Models: It All Begins with Tokenizers",
+      "authors": "Menan Velayuthan, Kengatharaiyer Sarveswaran",
+      "venue": "Proceedings of the 31st International Conference on Computational Linguistics (COLING 2025)",
+      "where": "Abu Dhabi, UAE",
+      "pages": "5987–5996",
+      "year": "2025",
+      "url": "https://aclanthology.org/2025.coling-main.400/",
+      "code": "https://github.com/vmenan/tokenizers-coling2025",
+      "verified_on": "2026-08-19",
+      "verified_against": "ACL Anthology BibTeX record 2025.coling-main.400"
+    },
+    "thamizhimorph_2021": {
+      "title": "ThamizhiMorph: A morphological parser for the Tamil language",
+      "authors": "Kengatharaiyer Sarveswaran, Gihan Dias, Miriam Butt",
+      "venue": "Machine Translation 35:37–70, Springer",
+      "year": "2021",
+      "url": "https://doi.org/10.1007/s10590-021-09261-5",
+      "code": "https://github.com/sarves/thamizhi-morph",
+      "verified_on": "2026-08-19",
+      "verified_against": "the DOI recorded in the server's own source registry"
+    },
+    "ilakkanam": {
+      "title": "From Phonemes to Meaning: Evaluating LLMs on Tamil",
+      "authors": "University of Jaffna",
+      "venue": "arXiv:2511.12387",
+      "year": "2025",
+      "url": "https://arxiv.org/abs/2511.12387",
+      "verified_on": "2026-08-19",
+      "verified_against": "the arXiv identifier recorded in DESIGN.md §12"
+    }
+  }
+}
