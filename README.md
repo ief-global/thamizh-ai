@@ -42,6 +42,28 @@ dependencies, and at this size the build catches what matters. Add it when the s
 
 Node 18+ (built on 22). No database, no API, no server runtime. It is static files.
 
+## Deploying
+
+Cloudflare builds this from GitHub. The dashboard asks for two commands and no output directory,
+because the output directory lives in [`wrangler.jsonc`](wrangler.jsonc) instead:
+
+| Field | Value |
+|---|---|
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | leave empty |
+
+`wrangler.jsonc` declares `assets.directory: "./dist"`, `html_handling: "auto-trailing-slash"` so a
+page is served at `/why` rather than `/why.html`, and `not_found_handling: "404-page"` so a bad URL
+gets our own 404. There is no `main`: this is an assets-only Worker, so no server code runs.
+
+Check it locally before pushing a change to the deploy config:
+
+```bash
+npm run build
+npx wrangler deploy --dry-run
+```
+
 ## Layout
 
 ```

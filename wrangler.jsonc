@@ -1,0 +1,26 @@
+{
+  // Cloudflare Workers static-asset deployment. This file is why the dashboard does not
+  // need an output-directory field: `assets.directory` below IS that setting.
+  //
+  // In the Cloudflare build settings, use exactly:
+  //   Build command:   npm run build
+  //   Deploy command:  npx wrangler deploy
+  //
+  // There is no `main`, on purpose. This is an assets-only Worker: no server code runs,
+  // Cloudflare just serves dist/. Verified against developers.cloudflare.com 2026-08-19.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thamizh-ai",
+  "compatibility_date": "2026-08-19",
+  "assets": {
+    "directory": "./dist",
+
+    // Astro builds with `format: 'file'` and `trailingSlash: 'never'`, so a page is
+    // /why.html on disk. auto-trailing-slash serves it at /why, which is what every link
+    // on the site and in our letters uses.
+    "html_handling": "auto-trailing-slash",
+
+    // Serve our own 404.html rather than a Cloudflare error page. When the app takes this
+    // domain (D-019), the redirect rules land in front of this.
+    "not_found_handling": "404-page"
+  }
+}
