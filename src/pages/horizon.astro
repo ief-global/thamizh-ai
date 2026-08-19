@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Paper from '../components/Paper.astro';
 
 const stages = [
   { id: 'A', name: 'Word in context', done: false,
@@ -33,7 +34,7 @@ const stages = [
   <div class="wrap">
     <header class="pagehead">
       <p class="kicker">Horizon</p>
-      <h1 class="ta">தமிழ் மொழி மாதிரி <span class="en">a Tamil-native model</span></h1>
+      <h1 class="ta">தமிழ் இயல்பு படிமம் <span class="en">a Tamil-native model</span></h1>
       <p class="lede">
         Written down so that today's choices do not accidentally rule it out. <b>None of this is
         scheduled</b>, and this page would be dishonest if it read like a plan.
@@ -103,6 +104,11 @@ const stages = [
         <b>Stage C before stage E, always.</b> A predictor without a realizer just produces more
         fragmented output, which is the problem we started with.
       </p>
+      <p>
+        Stage F is the one place where somebody has already published a result we would build on
+        rather than repeat:
+      </p>
+      <Paper id="gpe_coling2025" note="They show that respecting the writing system at the character level beats byte-level tokenization for Tamil. Our stage F asks the same question about units of meaning rather than units of writing, and the segmentation data for it is what the server has been accumulating since the beginning. Two different levels of the same argument." />
     </section>
 
     <section>

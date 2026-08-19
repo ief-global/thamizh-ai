@@ -1,0 +1,27 @@
+---
+import papers from '../data/papers.json';
+
+interface Props { id: string; note?: string; }
+const { id, note } = Astro.props;
+const p = (papers.papers as Record<string, any>)[id];
+---
+<div class="paper">
+  <p class="pt"><a href={p.url}>{p.title}</a></p>
+  <p class="pa">{p.authors}</p>
+  <p class="pv">
+    {p.venue}{p.pages ? `, pp. ${p.pages}` : ''}{p.where ? `, ${p.where}` : ''}, {p.year}.
+    {p.code && <> Code: <a href={p.code}>{p.code.replace('https://github.com/', '')}</a>.</>}
+  </p>
+  {note && <p class="pn">{note}</p>}
+</div>
+
+<style>
+  .paper { border-left: 3px solid var(--accent2); padding: 2px 0 2px 18px; margin: 22px 0 0;
+    max-width: 66ch; }
+  .pt { margin: 0; font-size: 16.5px; font-weight: 600; line-height: 1.4; }
+  .pt a { color: var(--ink); text-decoration-color: var(--line); }
+  .pt a:hover { color: var(--accent); }
+  .pa { margin: 6px 0 0; font-size: 14.5px; }
+  .pv { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin: 5px 0 0; }
+  .pn { font-size: 14.5px; color: var(--muted); margin: 10px 0 0; }
+</style>

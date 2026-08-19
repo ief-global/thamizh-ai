@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Paper from '../components/Paper.astro';
 import tok from '../data/tokenization.json';
 
 const max = Math.max(...tok.rows.map((r) => r.cl100k));
@@ -104,6 +105,28 @@ const pct = (n: number) => `${Math.round((n / max) * 100)}%`;
         about, tell us and we will cite you.
       </p>
 
+      <h3 class="sub">Somebody has already worked on the fix</h3>
+      <p>
+        The fragmentation is not a law of nature. It follows from choices made when a tokenizer is
+        built, and the choice that matters most turns out to be the one made before the algorithm
+        even runs.
+      </p>
+      <Paper id="gpe_coling2025" note="Their finding is that pre-tokenization, the step that decides what counts as a character before any merging happens, matters more for fair representation than the tokenization algorithm itself. Their fix builds the Tamil writing system into that step: Grapheme Pair Encoding, which merges graphemes rather than bytes, and which beats byte-level tokenizers on Tamil, Sinhala and Hindi." />
+      <p>
+        We cite this for two reasons. It is the scholarly version of the table above, done properly by
+        people who then did something about it. And the second author is
+        <a href="/sources/thamizhimorph"> Sarveswaran</a>, whose morphological analyser this whole
+        project is built on, which says something about how small the group of people working on
+        computable Tamil actually is.
+      </p>
+      <p class="note">
+        <b>A grapheme is not a morpheme,</b> and the distinction matters for what comes later. Their
+        work respects the writing system: a Tamil character stays whole instead of being split into
+        bytes. <a href="/horizon">Our long-term stage</a> asks the same question one level up, about
+        units of <i>meaning</i> rather than units of <i>writing</i>. Both are needed and neither
+        replaces the other.
+      </p>
+
       <h3 class="sub">Why the fragments cost more than context</h3>
       <p>
         A long Tamil prompt fills the window faster than the same content in English, which is the
@@ -116,10 +139,10 @@ const pct = (n: number) => `${Math.round((n / max) * 100)}%`;
     <section>
       <h2>The measurement somebody else already made</h2>
       <p>
-        <b>ILAKKANAM</b> (arXiv:2511.12387, University of Jaffna) is the first Tamil linguistics
-        benchmark: 820 school examination questions across Grades 1 to 13, covering phonetics,
-        phonology, morphology, syntax and semantics.
+        <b>ILAKKANAM</b> is the first Tamil linguistics benchmark: 820 school examination questions
+        across Grades 1 to 13, covering phonetics, phonology, morphology, syntax and semantics.
       </p>
+      <Paper id="ilakkanam" />
       <ul class="findings">
         <li>The best frontier model scored <b>79.6%</b>. Claude Sonnet 4.5 scored 71.1%. Open-source models scored between 37.9% and 60.7%.</li>
         <li>Accuracy <b>falls as the grade rises</b>, which is the opposite of what understanding would predict.</li>

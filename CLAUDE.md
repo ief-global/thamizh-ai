@@ -38,7 +38,10 @@ govern the design repo govern this one, and two more besides.
   NLP tool". There is a rich Tamil NLP ecosystem and we stand on it.
 - **Attribute ThamizhiMorph** (Sarveswaran, Dias & Butt 2021, Apache-2.0) wherever the analyser is
   discussed.
-- **A repo description is not a citation.** Verify a paper's authors and venue before naming them.
+- **A repo description is not a citation.** Every paper the site cites lives in
+  `src/data/papers.json` with the record it was verified against and the date. Render it with the
+  `Paper` component. Adding a citation means checking the ACL Anthology or arXiv record first, not
+  after.
 
 ## The two mechanisms that stop this site going stale
 
@@ -58,6 +61,9 @@ govern the design repo govern this one, and two more besides.
 | `src/data/sources.json` | `scripts/sync-sources.py` | `thamizh-mcp/data/sources.json` — the source registry |
 | `src/data/glossary.json` | `scripts/sync-glossary.py` | `thamizh-mcp-design/Glossary.md` — the quick-reference table |
 | `src/data/tokenization.json` | `scripts/measure-tokens.py` | measured here, with `tiktoken` |
+
+`src/data/papers.json` is hand-maintained and is the exception, because a citation cannot be synced
+from anywhere. Each entry records what it was verified against and when.
 
 Each script exits quietly when the sibling repo is missing, so a CI build never depends on a
 checkout it does not have. Re-run all three syncs after pulling either sibling repo.
