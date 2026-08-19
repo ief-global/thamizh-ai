@@ -40,11 +40,17 @@ const pages = {
       <div class="kicker">International Educational Foundation</div>
       <p class="wordmark ta">தமிழ்<span class="ai">AI</span></p>
       <h1>Two thousand years of Tamil grammar, in a form a machine can cite.</h1>
-      <p class="lede">
-        Tamil is called a low-resource language. The rules were never missing, the machine-readable
-        data was. We are building the grammar layer that sits under an AI: every claim names the
-        <span class="ta">நூற்பா</span> behind it, and when no source can ground an answer, it says so.
-      </p>
+      <div class="says">
+        <p class="lede">
+          An AI can write fluent Tamil today. Ask it how a Tamil word is built, or which rule makes
+          that true, and it is often wrong, and confident about it.
+        </p>
+        <p class="lede">
+          <span class="ta">தமிழ்AI</span> is the part underneath that does not have to guess. A free,
+          open grammar engine that takes a Tamil word apart, names the <span class="ta">நூற்பா</span>
+          behind every claim, and returns an honest gap when no source can settle the answer.
+        </p>
+      </div>
       <div class="cta">
         <a class="btn solid" href="#stack">How it is built</a>
         <a class="btn" href="/why">Why it is needed</a>
@@ -121,7 +127,7 @@ const pages = {
   .hero {
     position: relative; isolation: isolate; overflow: hidden;
     background: var(--deep); color: var(--cream);
-    padding: clamp(64px, 13vh, 132px) 0 clamp(52px, 9vh, 96px);
+    padding: clamp(40px, 7vh, 76px) 0 clamp(36px, 6vh, 64px);
   }
   .hero::before {
     content: ""; position: absolute; inset: 0; z-index: -2;
@@ -135,12 +141,16 @@ const pages = {
       linear-gradient(to top, rgba(26,12,14,.72), rgba(26,12,14,0) 55%);
   }
   .hero .kicker { color: var(--ochre); }
-  .wordmark { font-size: clamp(50px, 9.5vw, 96px); font-weight: 700; line-height: .98;
-    margin: 16px 0 0; letter-spacing: -.015em; max-width: none; }
+  .wordmark { font-size: clamp(44px, 8vw, 80px); font-weight: 700; line-height: .98;
+    margin: 12px 0 0; letter-spacing: -.015em; max-width: none; }
   .wordmark .ai { color: #e9a0aa; }
-  .hero h1 { font-size: clamp(23px, 3.3vw, 34px); line-height: 1.32; margin: 24px 0 0; max-width: 19ch; }
-  .hero .lede { font-size: 18px; color: #e2d3c9; max-width: 58ch; }
-  .cta { display: flex; flex-wrap: wrap; gap: 12px 14px; margin: 30px 0 0;
+  /* Two lines at every width that matters. 19ch stacked it four deep and wasted the band. */
+  .hero h1 { font-size: clamp(24px, 3.4vw, 36px); line-height: 1.25; margin: 18px 0 0;
+    max-width: 34ch; text-wrap: balance; }
+  .says { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 8px 40px; margin-top: 20px; max-width: 74ch; }
+  .hero .lede { font-size: 17px; color: #e2d3c9; max-width: 46ch; margin: 0; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px 14px; margin: 26px 0 0;
     font-family: var(--ui); font-size: 14.5px; }
   .btn { display: inline-block; padding: 11px 20px; border: 1px solid rgba(247,240,232,.42);
     color: var(--cream); text-decoration: none; border-radius: 2px; }
