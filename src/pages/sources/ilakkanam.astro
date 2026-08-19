@@ -1,5 +1,6 @@
 ---
 import SourcePage from '../../layouts/SourcePage.astro';
+import Paper from '../../components/Paper.astro';
 
 const cats = [
   ['L1', 'Phonetics'], ['L2', 'Phonology'], ['L3', 'Morphology'],
@@ -13,8 +14,8 @@ const cats = [
   state="asked-for"
   lede="The first benchmark that tests a model on Tamil linguistics rather than on translation. 820 school examination questions, Grades 1 to 13, from the University of Jaffna. It is how we would find out whether any of this actually helps."
   facts={[
-    { label: 'Paper', value: 'From Phonemes to Meaning: Evaluating LLMs on Tamil (arXiv:2511.12387)' },
-    { label: 'From', value: 'University of Jaffna' },
+    { label: 'Paper', value: 'From Phonemes to Meaning (arXiv:2511.12387)' },
+    { label: 'Senior author', value: 'Kengatharaiyer Sarveswaran, University of Jaffna' },
     { label: 'Size', value: '820 questions, Grades 1–13, six categories' },
     { label: 'Status', value: 'The dataset was not public when we last checked' },
   ]}
@@ -23,6 +24,8 @@ const cats = [
     { label: 'DECISIONS.md D-005', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
   ]}
 >
+  <Paper id="ilakkanam" note="The senior author is the same person behind ThamizhiMorph, the analyser this project runs on, and behind the tokenizer work cited on our why page. Four of the things this project stands on trace back to one research group." />
+
   <section>
     <h2>What it found</h2>
     <div class="cats">{cats.map(([k, n]) => (<span class="cat"><b>{k}</b> {n}</span>))}</div>
