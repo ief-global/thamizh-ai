@@ -1,0 +1,214 @@
+---
+import Base from '../layouts/Base.astro';
+import StatusStrip from '../components/StatusStrip.astro';
+import tools from '../data/tools.json';
+import status from '../data/status.json';
+---
+<Base
+  title="The engine, and its nine tools"
+  description="What has actually been built: nine tools over one engine, what each is for, how they chain, and what each of them refuses to do."
+  derivesFrom={[
+    { label: 'CODE-STATUS.md', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md' },
+    { label: 'the blueprint §6 and §8', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/Thamizh-MCP-blueprint.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">The scorecard</p>
+      <h1>What we have actually built</h1>
+      <p class="lede">
+        Nine tools over one engine, with four ways to reach it. This page is the honest inventory:
+        what each tool is for, how they chain together, and what each one refuses to do. The refusals
+        are the part worth reading.
+      </p>
+    </header>
+
+    <div class="statwrap"><StatusStrip /></div>
+
+    <section>
+      <h2>One engine, four front doors</h2>
+      <p>
+        The analysis lives in a plain Python library. Everything else is a thin adapter on top of it.
+        An MCP server so an AI assistant can call it, a REST API for apps, a browser page for people
+        who will never install anything, and a command line.
+      </p>
+
+      <div class="scroll-x">
+        <div class="flowmap" role="img" aria-label="Diagram: four heads sit over one engine; the engine consults anchors first, then evolving sources, and writes results back to a knowledge store with provenance.">
+          <div class="col">
+            <p class="collab">Heads</p>
+            <div class="node head">MCP server<span>AI assistants</span></div>
+            <div class="node head">REST API<span>apps</span></div>
+            <div class="node head">Web page<span>everyone else</span></div>
+            <div class="node head">CLI<span>terminals</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="col">
+            <p class="collab">One engine</p>
+            <div class="node engine">
+              normalise
+              <span>reject non-Tamil input</span>
+            </div>
+            <div class="node engine">
+              knowledge store
+              <span>cache hit, served with its provenance</span>
+            </div>
+            <div class="node engine">
+              decoder and classifier
+              <span>the rules, isolated so nothing re-derives them</span>
+            </div>
+            <div class="node engine gapnode">
+              merge, or return a gap
+              <span>every path can end in an honest gap</span>
+            </div>
+          </div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="col">
+            <p class="collab">Sources</p>
+            <div class="node anchor">
+              Anchors
+              <span>ThamizhiMorph FST · pinned Tholkappiyam and Nannūl · curated verb paradigms · cited rule tables</span>
+            </div>
+            <div class="node evolving">
+              Evolving
+              <span>Tamil Wiktionary for meaning · English Wiktionary for etymology · attested equivalents lists</span>
+            </div>
+            <div class="node store">
+              Write back
+              <span>every claim stored with source, tier and retrieval date</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="src">
+        The web page was added later and needed <b>zero changes to the engine</b>. That is the
+        evidence that "one engine, many heads" was a real design rather than a diagram in a document.
+      </p>
+    </section>
+
+    <section>
+      <h2>The nine tools</h2>
+      <p>
+        Grouped by what they are for. <b>Refuses</b> is not a caveat list, it is the product: a tool
+        that declines to answer is the only kind a teacher can safely put in front of a student.
+      </p>
+
+      {tools.groups.map((g) => (
+        <div class="group">
+          <h3 class="gname">{g.name}</h3>
+          <p class="gblurb">{g.blurb}</p>
+          {g.tools.map((t) => (
+            <div class="tool">
+              <p class="tname"><code>{t.name}</code></p>
+              <p class="tobj ta">{t.objective}</p>
+              <p class="tref ta"><span class="lab">Refuses</span> {t.refuses}</p>
+            </div>
+          ))}
+        </div>
+      ))}
+      <p class="src">
+        Summarised from the server's own tool descriptions, read {tools.read_on}. Those descriptions
+        are a product surface rather than documentation: a model decides whether to call a tool by
+        reading them, and we once measured a model calling these tools 0% of the time under a neutral
+        prompt. The server was returning correct answers. Nothing was telling the model to ask.
+      </p>
+    </section>
+
+    <section>
+      <h2>How a single call chains</h2>
+      <p>
+        Asking <code>analyze_word</code> one question fans out to the six read tools, merges what they
+        return, and reports each field with the source that grounded it. The two writers feed the same
+        store from the side, which is how coverage grows.
+      </p>
+      <ol class="chain">
+        <li><b>Normalise</b> the input, and reject anything that is not a single Tamil word.</li>
+        <li><b>Ask the store.</b> A hit is served with the provenance it was stored with.</li>
+        <li><b>Ask the anchors:</b> the FST for morphology, the cited rule tables and the pinned verses for grammar.</li>
+        <li><b>Ask the evolving sources</b> only for what anchors cannot supply, chiefly meaning and etymology.</li>
+        <li><b>Merge,</b> keeping competing readings rather than adjudicating them.</li>
+        <li><b>Write back</b> what was newly learned, tagged with its source and the date.</li>
+        <li><b>Return</b> the answer, with a gap wherever nothing could ground a field.</li>
+      </ol>
+      <p>
+        Step 6 is quietly the most important one on this page. Every resolved analysis is captured as
+        verified, provenance-tagged data, so the corpus Tamil is missing accumulates as a by-product
+        of ordinary use. That is the bridge to <a href="/#stack">the horizon</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Every source declares two independent things</h2>
+      <p>
+        How good the evidence is, graded A to D, and what we are legally allowed to do with it. They
+        are separate questions and collapsing them causes mistakes in both directions: a source can be
+        excellent evidence that we may only consult and cite.
+      </p>
+      <p>
+        The grade is stamped onto every citation the server returns and shown in the app, so a reader
+        can see that a claim rests on a pinned classical edition rather than on a community word list.
+        This came out of finding that one word list we depend on had no stated licence at all, which
+        is written up on <a href="/#stack">the sources layer</a> and stays published rather than
+        quietly fixed.
+      </p>
+    </section>
+
+    <section>
+      <h2>What is not done</h2>
+      <p>Current, from the code side, verified {status.verified_on}:</p>
+      <ul class="gaps">{status.not_done.map((n: string) => <li class="ta">{n}</li>)}</ul>
+      <p class="note">
+        The formation decoder handles {status.figures.formation_decoded} of
+        {' '}{status.figures.formation_in_scope} in-scope words in the everyday sweep. The
+        remainder are non-finite forms, and they are blocked on a grammar question we have not
+        settled rather than on code. <b>We would rather leave them undecoded than name them wrongly.</b>
+      </p>
+      <p class="onward"><a href="/why">Why any of this is necessary &rarr;</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(28px, 4.4vw, 44px); line-height: 1.15; margin: 12px 0 0; max-width: 20ch; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .statwrap { margin: 32px 0 0; }
+  .src { font-family: var(--ui); font-size: 13px; color: var(--muted); margin-top: 18px; max-width: 68ch; }
+  code { font-family: var(--mono); font-size: .92em; }
+
+  .flowmap { display: grid; grid-template-columns: 1fr auto 1.15fr auto 1.15fr; gap: 14px;
+    align-items: start; margin: 26px 0 0; min-width: 720px; }
+  .col { display: flex; flex-direction: column; gap: 8px; }
+  .collab { font-family: var(--ui); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin: 0 0 2px; }
+  .node { border: 1px solid var(--line); background: var(--card); padding: 10px 13px;
+    font-size: 15px; line-height: 1.35; }
+  .node span { display: block; font-family: var(--ui); font-size: 11.5px; color: var(--muted);
+    margin-top: 5px; line-height: 1.4; }
+  .node.head { border-left: 4px solid var(--accent2); }
+  .node.engine { border-left: 4px solid var(--accent); }
+  .node.gapnode { border-left-color: var(--warn); }
+  .node.anchor { border-left: 4px solid var(--ok); }
+  .node.evolving { border-left: 4px solid var(--ochre); }
+  .node.store { border-left: 4px solid var(--muted); }
+  .arrow { align-self: center; color: var(--muted); font-size: 20px; padding-top: 20px; }
+
+  .group { margin: 34px 0 0; }
+  .gname { font-size: 13px; font-family: var(--ui); letter-spacing: .13em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; }
+  .gblurb { color: var(--muted); font-size: 15px; margin: 8px 0 0; }
+  .tool { border-top: 1px solid var(--line); padding: 16px 0 4px; }
+  .tname { margin: 0; font-size: 16px; }
+  .tname code { color: var(--accent2); font-weight: 600; font-size: 15.5px; }
+  .tobj { margin: 9px 0 0; }
+  .tref { margin: 10px 0 0; font-size: 15px; color: var(--muted); border-left: 3px solid var(--warn);
+    padding-left: 14px; }
+  .tref .lab { font-family: var(--ui); font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--warn); font-weight: 600; margin-right: 8px; }
+
+  .chain { margin: 20px 0 0; padding-left: 22px; max-width: var(--measure); }
+  .chain li { margin: 9px 0; }
+  .gaps { margin: 16px 0 0; padding-left: 20px; max-width: var(--measure); color: var(--muted); }
+  .gaps li { margin: 7px 0; }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+</style>

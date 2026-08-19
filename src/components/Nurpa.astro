@@ -1,0 +1,36 @@
+---
+/**
+ * A quoted நூற்பா, with the authority that states it.
+ * The verse text always comes from src/data/grammar.json, which is generated from the
+ * pinned editions. Never pass a hand-typed string to this component.
+ */
+interface Props {
+  authority: string;   // "Tholkappiyam" | "Nannūl"
+  ref?: string;        // அதிகாரம் › இயல், for Tholkappiyam
+  verse: string;
+  text: string;
+  role?: string;       // "primary" | "fallback" | free text
+}
+const { authority, ref, verse, text, role } = Astro.props;
+---
+<figure class="nurpa">
+  <blockquote class="ta">{text}</blockquote>
+  <figcaption>
+    <span class="auth">{authority}</span>
+    {ref && <span class="ta ref">{ref}</span>}
+    <span class="ta verse">{verse}</span>
+    {role && <span class="role">{role}</span>}
+  </figcaption>
+</figure>
+
+<style>
+  .nurpa { margin: 20px 0 0; padding: 0; border-left: 3px solid var(--ochre); }
+  blockquote { margin: 0; padding: 0 0 0 18px; font-size: 17.5px; line-height: 1.75;
+    max-width: 58ch; }
+  figcaption { padding: 9px 0 0 18px; font-family: var(--ui); font-size: 12.5px;
+    color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+  .auth { color: var(--accent); font-weight: 600; letter-spacing: .04em; }
+  .ref, .verse { font-family: var(--ta); }
+  .role { border: 1px solid var(--line); padding: 1px 7px; border-radius: 2px; font-size: 11px;
+    letter-spacing: .08em; text-transform: uppercase; }
+</style>

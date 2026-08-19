@@ -1,0 +1,82 @@
+{
+  "_comment": "The nine MCP tools. Summarised from the docstrings in thamizh-mcp/src/thamizh_mcp/server.py, read 2026-08-19. The `refuses` lines are behaviour the code actually implements, not aspirations: if one stops being true, fix the server or fix this file.",
+  "read_from": "https://github.com/ief-global/thamizh-mcp/blob/main/src/thamizh_mcp/server.py",
+  "read_on": "2026-08-19",
+  "groups": [
+    {
+      "name": "The front door",
+      "blurb": "One call that composes the rest and merges their provenance. Most callers never need another.",
+      "tools": [
+        {
+          "name": "analyze_word",
+          "objective": "Return everything the project knows about one Tamil word: origin, root and meaning, formation, grammar, and an attested native equivalent when the word is borrowed.",
+          "refuses": "Non-Tamil, multi-word or empty input comes back as an error saying what to fix. Any field no source can ground is reported as a gap rather than filled."
+        }
+      ]
+    },
+    {
+      "name": "The fact-finders",
+      "blurb": "Where the word came from, what it reduces to, and what it means. Each answers one question and carries its own sources.",
+      "tools": [
+        {
+          "name": "classify_origin",
+          "objective": "Say whether a word is native (இயற்சொல்), Sanskrit-derived (வடசொல்) or a loanword, from orthography, the native FST parse and attestation.",
+          "refuses": "திரிசொல் and திசைச்சொல் need corpus and dialect knowledge we do not have, so they are never guessed. When the signals cannot settle a class the answer is `unknown` with the evidence collected so far. Homographs get one entry per sense, because கால் is leg and also time."
+        },
+        {
+          "name": "get_root",
+          "objective": "Resolve the lemma or வேர்ச்சொல் from the ThamizhiMorph anchor. மரத்தில் gives மரம்; வந்தான் gives வா.",
+          "refuses": "When the morphology is ambiguous the lemma is left empty and every valid analysis is returned. It never picks one quietly. With no analyser available the lemma is a gap, not a guess."
+        },
+        {
+          "name": "get_meaning",
+          "objective": "Return sourced senses with the source and retrieval date on each, from the knowledge store or a live pull.",
+          "refuses": "A word no source can ground returns a gap with the reason. It never writes a plausible gloss."
+        }
+      ]
+    },
+    {
+      "name": "The grammar tools",
+      "blurb": "The two that answer a Tamil teacher's questions, and the two the ILAKKANAM benchmark tests hardest.",
+      "tools": [
+        {
+          "name": "explain_formation",
+          "objective": "Split the word into Nannūl's six பகுபத உறுப்பு and name the புணர்ச்சி at each join, with the authority on every label.",
+          "refuses": "A join the analyser cannot determine is left unnamed rather than invented. A simple or borrowed word is reported as பகாப்பதம், which is an answer and not an error."
+        },
+        {
+          "name": "explain_grammar",
+          "objective": "Return word class (பெயர் / வினை / இடை / உரி), வேற்றுமை for nouns, and tense with person, number and gender for verbs. Tholkappiyam first, with the authority recorded.",
+          "refuses": "Ambiguity is preserved. The suffix இல் reads as both the fifth and the seventh வேற்றுமை, so both come back rather than one being chosen."
+        }
+      ]
+    },
+    {
+      "name": "The equivalents tool",
+      "blurb": "The highest hallucination risk in the whole server, and the one with the hardest rule.",
+      "tools": [
+        {
+          "name": "suggest_native_equivalent",
+          "objective": "For a borrowed word, offer pure-Tamil equivalents that a named glossary actually attests, each candidate carrying its attestation.",
+          "refuses": "An unattested coinage never surfaces, however plausible. A word with no attested equivalent comes back as an honest gap, which is a common and acceptable answer."
+        }
+      ]
+    },
+    {
+      "name": "The writers",
+      "blurb": "How coverage grows without anybody maintaining a word list. These are the only two tools that change anything.",
+      "tools": [
+        {
+          "name": "enrich_word",
+          "objective": "Force the enrichment loop for one word: pull from evolving sources, write the result back to the knowledge store with provenance, and report what the store now holds.",
+          "refuses": "Only fields with a real evolving source are cached. Rule-based answers are recomputed rather than stored, so a rule fix takes effect everywhere at once."
+        },
+        {
+          "name": "refresh_sources",
+          "objective": "Re-pull a batch of words, either named explicitly or selected by how stale their cached claim is, bounded by a limit so the network cost stays predictable.",
+          "refuses": "Called with no scope at all it returns an error asking for one, rather than sweeping the entire store."
+        }
+      ]
+    }
+  ]
+}
