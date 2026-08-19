@@ -1,0 +1,200 @@
+---
+/**
+ * D1 — the layer stack.
+ * `ready` marks whether that layer's page is built yet. Until it is, the name is plain
+ * text and the dialog says so, rather than linking to a 404. It is the site's navigation as well as its argument.
+ * Reads top to bottom, layer 1 first, ending at the horizon.
+ * Two levels of disclosure: <details> works with JavaScript off; the dialog adds depth.
+ */
+// Pages built so far. Add an id here the moment its page ships.
+const ready = new Set<string>([]);
+
+const layers = [
+  {
+    id: 'grammar', rung: 'Layer 1', accent: 'var(--accent)',
+    ta: 'இலக்கணம்', en: 'grammar', href: '/grammar',
+    q: 'What makes an answer true, and who says so.',
+    carries: [
+      'Which authority governs which topic, as a table',
+      'How a citation is written: அதிகாரம் › இயல் › நூற்பா',
+      'Why we pinned full editions instead of trusting quoted verse numbers',
+    ],
+    deep: [
+      'Ask a model a Tamil grammar question and it answers from whatever it read on the internet. That is a popularity contest. We pick the authority first, then make the software obey it.',
+      'தொல்காப்பியம் is first. நன்னூல் is used where Tholkappiyam does not codify the point, and the six-part பகுபத உறுப்பு scheme is the main such place. Every answer records which of the two it used.',
+      'Both editions are pinned as version-locked, checksummed files and read while the server runs. So when the tool says a word is in the seventh வேற்றுமை, it shows the நூற்பா that says so. You get to disagree with the verse rather than with a machine.',
+      'One trap this already cost us: verse numbers quoted in secondary sources drift. Three of our rule tables carried wrong numbers before we pinned the full texts.',
+    ],
+  },
+  {
+    id: 'morphology', rung: 'Layer 2', accent: '#95452f',
+    ta: 'பகுபத உறுப்பிலக்கணம்', en: 'morphology', href: '/morphology',
+    q: 'How a Tamil word is taken apart, and why a dictionary can never do it.',
+    carries: [
+      'Agglutination explained without jargon',
+      'The six உறுப்பு, each with its technical name',
+      'One word shown as anatomy, each part labelled with its role and its authority',
+      'ThamizhiMorph credited in full, and the wider Thamizhi suite mapped onto our roadmap',
+    ],
+    deep: [
+      'Morphology is the study of how a word is built out of parts. Tamil grammar has had a name for that for centuries. Same subject, older vocabulary.',
+      'Tamil keeps its grammar inside the word. English needs three words for "in the tree", Tamil needs one. A system that treats a Tamil word as a single opaque string has thrown away most of the grammar before it starts.',
+      'And the forms cannot be listed. One verb root yields thousands, so a fixed word list is out of date the moment somebody inflects something. That is why the core is a rule engine and not a database.',
+      'The rules run on ThamizhiMorph, the finite-state analyser published by Sarveswaran, Dias and Butt in 2021 under Apache-2.0. A finite-state machine runs in both directions: it can take a word apart, and it can build one. We use one direction today. The other is where the long road starts.',
+    ],
+  },
+  {
+    id: 'sources', rung: 'Layer 3', accent: 'var(--ochre)',
+    ta: 'மூலம்', en: 'sources', href: '/sources',
+    q: 'What it grounds on, what we still need, what we may not use.',
+    carries: [
+      'The ledger: every source, its evidential grade, and what we may legally do with it',
+      'A page each for ThamizhiMorph, Project Madurai, TVA, Aalamaram, ILAKKANAM and the Madras Lexicon',
+      'Three open asks, with what we want and what we would give back',
+      'The one licence gap we currently ship, named in public',
+    ],
+    deep: [
+      'Two questions get asked about every source, and they are kept apart on purpose. How good is the evidence, and what are we allowed to do with it. Collapsing them causes mistakes in both directions.',
+      'So each source carries a grade from A to D, and separately a redistribution mode: ship it, serve it with attribution, or consult and cite it only. The Madras University Lexicon is excellent evidence and we may not bundle a line of it. Project Madurai’s classical texts travel with us, because they grant distribution as long as the header stays intact.',
+      'Held today: the pinned Tholkappiyam and Nannūl, ThamizhiMorph, Tamil Wiktionary, and our own verified verb paradigms.',
+      'Asked for: the TVA கலைச்சொல் glossaries, the Aalamaram treebank, the ILAKKANAM benchmark. Each has a page saying what we want and what we would give back.',
+    ],
+  },
+  {
+    id: 'distribution', rung: 'Layer 4', accent: 'var(--accent2)',
+    ta: 'பகிர்வு', en: 'distribution', href: '/distribution',
+    q: 'How this reaches a Tamil speaker who will never install anything.',
+    carries: [
+      'The nine tools, each with its objective in one line, and the chain that connects them',
+      'What each tool refuses to do, which is the part that earns trust',
+      'Where the server will be installable from, and which registries list it',
+      'What ships as data, and under what terms',
+    ],
+    deep: [
+      'An MCP server is not something a person uses. It is an adapter that lets an AI assistant call your logic. So the thing to build is one engine with several front doors.',
+      'Today there are four: an MCP head for assistants, a REST API for apps, a browser page for people who will never install anything, and a command line. The browser page needed no engine changes at all, which is how we know the design held.',
+      'Nobody running it locally is required to set up a container or a database. That zero-config install is protected on purpose, because the people most likely to try this are teachers, not sysadmins.',
+      'The code is Apache-2.0 under a nonprofit and adoption is the goal. Anyone can self-host, and the curated data goes to Hugging Face where the people training models actually look.',
+    ],
+  },
+  {
+    id: 'horizon', rung: 'Horizon', accent: 'var(--muted)', dashed: true,
+    ta: 'தமிழ் மொழி மாதிரி', en: 'a Tamil-native model', href: '/horizon',
+    q: 'Written down, deliberately not scheduled.',
+    carries: [
+      'The stages from word analyser to sentence, in order, each shippable on its own',
+      'The data flywheel, drawn',
+      'The two questions we have to settle before any of it starts',
+    ],
+    deep: [
+      'Tamil is short of machine-readable linguistic data, not of literature. So every analysis the server resolves is stored as verified, provenance-tagged data. The corpus grows as a by-product of ordinary use rather than as a project somebody has to fund.',
+      'Enough of it makes two things possible. A tokenizer whose units are morphemes instead of statistical fragments, which attacks the token explosion problem at its root. Then a small Tamil model trained on data that was checked rather than scraped.',
+      'None of this is scheduled, and the page says so. There is a written trigger: roughly 100,000 verified records and evaluation that runs as routine. Until both hold, the work stays where it is.',
+      'The endpoint we expect is a pairing. A large model handles meaning, this engine handles morphology and word building. Cheaper to run than either half pretending to do both.',
+    ],
+  },
+];
+---
+<div class="stack">
+  {layers.map((l) => (
+    <div class:list={['band', l.dashed && 'dashed']} style={`--band:${l.accent}`}>
+      <div class="bhead">
+        <span class="rung">{l.rung}</span>
+        <h3 class="bname ta">
+          {ready.has(l.id) ? <a href={l.href}>{l.ta}</a> : <span>{l.ta}</span>}
+          <span class="en">{l.en}</span>
+        </h3>
+        <p class="bq">{l.q}</p>
+        <span class="acts">
+          <details name="layer">
+            <summary>What the page carries</summary>
+            <ul>{l.carries.map((c) => <li class="ta">{c}</li>)}</ul>
+          </details>
+          <button type="button" data-dialog={`dlg-${l.id}`}>Explain this layer</button>
+        </span>
+      </div>
+    </div>
+  ))}
+</div>
+<p class="flow">every use feeds verified data back down &uarr;</p>
+
+{layers.map((l) => (
+  <dialog id={`dlg-${l.id}`} aria-labelledby={`h-${l.id}`}>
+    <div class="dwrap">
+      <button type="button" class="close" data-close>Close</button>
+      <div class="kicker">{l.rung}</div>
+      <h3 id={`h-${l.id}`} class="ta">{l.ta} <span class="en">{l.en}</span></h3>
+      {l.deep.map((p) => <p class="ta">{p}</p>)}
+      <p class="more">
+        {ready.has(l.id)
+          ? <a href={l.href}>Read the full page &rarr;</a>
+          : <span class="muted">Its page is being written.</span>}
+      </p>
+    </div>
+  </dialog>
+))}
+
+<style>
+  .stack { margin: 30px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .band { border: 1px solid var(--line); background: var(--card); border-left: 5px solid var(--band); }
+  .band.dashed { border-left-style: dashed; background: transparent; }
+  .bhead { display: grid; grid-template-columns: 78px 1fr; gap: 2px 20px; padding: 17px 20px; }
+  .rung { font-family: var(--ui); font-size: 11px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); padding-top: 6px; }
+  .bname { font-size: 22px; line-height: 1.35; margin: 0; }
+  .bname a { color: var(--ink); text-decoration: none; }
+  .bname a:hover { color: var(--accent); text-decoration: underline; }
+  .bname .en { font-size: 14.5px; color: var(--muted); font-weight: 400; font-family: var(--ui); margin-left: 8px; }
+  .bq { grid-column: 2; font-size: 15.5px; color: var(--muted); margin: 2px 0 0; }
+  .acts { grid-column: 2; display: flex; flex-wrap: wrap; align-items: flex-start;
+    gap: 8px 10px; margin-top: 12px; font-family: var(--ui); font-size: 13px; }
+  .acts details { flex: 1 1 100%; order: 2; }
+  .acts summary { cursor: pointer; display: inline-block; padding: 6px 13px;
+    border: 1px solid var(--line); border-radius: 2px; color: var(--muted); list-style: none; }
+  .acts summary::-webkit-details-marker { display: none; }
+  .acts summary:hover { background: var(--sunk); }
+  .acts details[open] summary { color: var(--ink); }
+  .acts ul { margin: 12px 0 0; padding: 14px 16px 14px 34px; background: var(--sunk);
+    border-left: 3px solid var(--ochre); font-size: 15px; font-family: var(--ta); }
+  .acts li { margin: 5px 0; }
+  .acts button { cursor: pointer; order: 1; padding: 6px 13px; border: 1px solid var(--line);
+    border-radius: 2px; color: var(--accent); background: var(--card); font: inherit; }
+  .acts button:hover { background: var(--sunk); }
+  .flow { font-family: var(--ui); font-size: 12.5px; color: var(--muted); text-align: right;
+    margin: 12px 4px 0 0; max-width: none; }
+
+  dialog { border: none; border-top: 5px solid var(--accent); background: var(--card);
+    color: var(--ink); max-width: 640px; width: calc(100% - 32px); padding: 0; border-radius: 3px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.28); }
+  dialog::backdrop { background: rgba(36,20,18,.62); }
+  .dwrap { padding: 26px clamp(20px,4vw,34px) 30px; }
+  dialog h3 { font-size: 24px; margin: 8px 0 0; line-height: 1.3; }
+  dialog h3 .en { font-family: var(--ui); font-size: 14px; color: var(--muted); font-weight: 400; margin-left: 8px; }
+  dialog p { margin: 15px 0 0; font-size: 16px; }
+  dialog .more { font-family: var(--ui); font-size: 14px; }
+  dialog .close { cursor: pointer; float: right; font-family: var(--ui); font-size: 13px;
+    color: var(--muted); border: 1px solid var(--line); background: var(--card);
+    padding: 5px 12px; border-radius: 2px; }
+  dialog .close:hover { background: var(--sunk); }
+
+  @media (max-width: 640px) {
+    .bhead { grid-template-columns: 1fr; }
+    .rung { padding-top: 0; }
+    .bq, .acts { grid-column: 1; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-dialog]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.dialog!;
+      (document.getElementById(id) as HTMLDialogElement | null)?.showModal();
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-close]').forEach((btn) => {
+    btn.addEventListener('click', () => btn.closest('dialog')?.close());
+  });
+  document.querySelectorAll<HTMLDialogElement>('dialog').forEach((d) => {
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  });
+</script>

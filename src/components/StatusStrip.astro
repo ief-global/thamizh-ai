@@ -1,0 +1,15 @@
+---
+import status from '../data/status.json';
+const f = status.figures;
+---
+<div class="status">
+  <div class="stat"><div class="v">{f.tools}</div><div class="l">tools live</div></div>
+  <div class="stat"><div class="v">{f.tests}</div><div class="l">tests passing</div></div>
+  <div class="stat"><div class="v">{f.origin_correct}<span class="of">/{f.sweep_words}</span></div><div class="l">origin correct</div></div>
+  <div class="stat"><div class="v">{f.origin_unknown}</div><div class="l">honest unknowns</div></div>
+</div>
+<p class="verified">
+  Measured on a {f.sweep_words} word everyday sweep. {f.origin_wrong === 1 ? 'One answer is wrong and we name it.' : `${f.origin_wrong} answers are wrong and we name them.`}
+  Verified {status.verified_on} against
+  <a href="https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md">CODE-STATUS.md</a>.
+</p>

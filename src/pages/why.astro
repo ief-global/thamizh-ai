@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+import tok from '../data/tokenization.json';
+
+const max = Math.max(...tok.rows.map((r) => r.cl100k));
+const pct = (n: number) => `${Math.round((n / max) * 100)}%`;
+---
+<Base
+  title="Why Tamil is called low-resource"
+  description="Tamil has been described by grammarians for two thousand years and is still poor in machine-readable data. What that costs, measured."
+  derivesFrom={[
+    { label: 'the tokenization analysis', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/tamil_llm_tokenization_analysis_gemini.md' },
+    { label: 'DESIGN.md §1', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">The problem</p>
+      <h1>A language described for two thousand years, and a machine that cannot read the description</h1>
+      <p class="lede">
+        Tamil grammar has been written down, argued over and taught continuously since
+        <span class="ta">தொல்காப்பியம்</span>. The rules are not missing. What is missing is any of it
+        in a form a machine can use.
+      </p>
+    </header>
+
+    <section>
+      <h2>What "low-resource" actually claims</h2>
+      <p>
+        It is a statement about data, not about literature. A language is low-resource when there is
+        little annotated, machine-readable material to train and test on: tagged corpora, treebanks,
+        lexicons with structure, benchmarks.
+      </p>
+      <p>
+        Tamil is rich in <span class="ta">இலக்கியம்</span> and <span class="ta">இலக்கணம்</span> and poor
+        in all of that. So a model learns Tamil the way a tourist does, from exposure, and it never
+        gets taught the grammar that Tamil scholars have spent two millennia making explicit.
+      </p>
+      <p class="note">
+        <b>Worth saying to anyone who finds the phrase insulting:</b> it describes a pipeline failure,
+        not the language. And it is fixable by building the data, which is what this project does as
+        a by-product of being used.
+      </p>
+    </section>
+
+    <section>
+      <h2>What happens to a Tamil word inside a model</h2>
+      <p>
+        Before a model reasons about text it splits it into tokens, using a vocabulary learned mostly
+        from English. Tamil carries its grammar inside the word, so those vocabularies have no entry
+        for what a Tamil word is made of, and the word shatters into fragments that mean nothing.
+      </p>
+      <p>
+        We measured it rather than quoting it. Six Tamil words, two OpenAI encodings, the count of
+        tokens each word becomes, next to the number of <span class="ta">உறுப்பு</span> the word
+        actually has.
+      </p>
+
+      <div class="scroll-x">
+        <table class="plain viz">
+          <thead>
+            <tr>
+              <th>Word</th>
+              <th>English</th>
+              <th class="n">cl100k</th>
+              <th class="n">o200k</th>
+              <th class="n">morphemes</th>
+              <th class="barcol">tokens under cl100k</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tok.rows.map((r) => (
+              <tr>
+                <td class="ta w">{r.tamil}</td>
+                <td class="muted">{r.english}</td>
+                <td class="n big">{r.cl100k}</td>
+                <td class="n">{r.o200k}</td>
+                <td class="n">{r.morphemes ?? '—'}</td>
+                <td class="barcol"><span class="bar" style={`width:${pct(r.cl100k)}`}></span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="src">
+        Measured {tok.measured_on} with {tok.tool}. Reproduce it:
+        <code>scripts/measure-tokens.py</code> in this repo.
+      </p>
+
+      <p>
+        The last row is the one to sit with. <span class="ta">படித்துக்கொண்டிருந்தார்கள்</span> is one
+        Tamil word carrying root, aspect, tense, person, number and honorific. Under the older encoding
+        it becomes 35 tokens. Its English translation, "they were reading", becomes 3.
+      </p>
+      <p>
+        The newer encoding is far better, and that is worth saying plainly rather than picking the
+        number that suits us: the same word drops from 35 tokens to 7. The problem is shrinking, and it
+        has not gone away. Seven fragments still carry no morphology, so nothing downstream can tell
+        that the word contains a tense.
+      </p>
+      <p class="note">
+        <b>What we do not claim:</b> we have not verified which shipping products use which encoding,
+        so this page names encodings and not models. If you know the mapping for a model you care
+        about, tell us and we will cite you.
+      </p>
+
+      <h3 class="sub">Why the fragments cost more than context</h3>
+      <p>
+        A long Tamil prompt fills the window faster than the same content in English, which is the
+        cost everybody notices. Two quieter costs matter more. Reasoning degrades across long runs of
+        meaningless fragments. And in retrieval, an embedding built from fragments does not sit near
+        the meaning of the word, so the search fails before the model ever sees the text.
+      </p>
+    </section>
+
+    <section>
+      <h2>The measurement somebody else already made</h2>
+      <p>
+        <b>ILAKKANAM</b> (arXiv:2511.12387, University of Jaffna) is the first Tamil linguistics
+        benchmark: 820 school examination questions across Grades 1 to 13, covering phonetics,
+        phonology, morphology, syntax and semantics.
+      </p>
+      <ul class="findings">
+        <li>The best frontier model scored <b>79.6%</b>. Claude Sonnet 4.5 scored 71.1%. Open-source models scored between 37.9% and 60.7%.</li>
+        <li>Accuracy <b>falls as the grade rises</b>, which is the opposite of what understanding would predict.</li>
+        <li>A model's ability to <b>name</b> a question's linguistic category does not predict getting the question right.</li>
+      </ul>
+      <p>
+        The authors' conclusion is the sentence this whole project turns on: the performance reflects
+        <b>exposure, not understanding</b>.
+      </p>
+    </section>
+
+    <section>
+      <h2>What we are not doing</h2>
+      <p>
+        Retraining a base model on more Tamil. It costs money a nonprofit does not have, it needs the
+        very data that does not exist yet, and it fixes nothing about citation. A larger model that is
+        confidently wrong about <span class="ta">வேற்றுமை</span> is still wrong, and a teacher still
+        cannot check it.
+      </p>
+      <h3 class="sub">What we do instead</h3>
+      <p>
+        Put the grammar where a model can look it up, and make every answer name its source. The model
+        keeps doing what it is good at, which is meaning. The parts that are rule-governed get handled
+        by rules that cannot hallucinate, and the answer arrives with the
+        <span class="ta">நூற்பா</span> attached so a scholar can overrule it.
+      </p>
+      <p class="onward">
+        <a href="/#stack">See the four layers &rarr;</a>
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(27px, 4.2vw, 42px); line-height: 1.2; margin: 14px 0 0; max-width: 22ch; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .sub { margin: 34px 0 0; color: var(--accent2); }
+  .findings { margin: 18px 0 0; padding-left: 20px; max-width: var(--measure); }
+  .findings li { margin: 9px 0; }
+  .src { font-family: var(--ui); font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .src code { font-family: var(--mono); font-size: 12.5px; }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+
+  table.viz { margin-top: 22px; min-width: 640px; }
+  table.viz td { padding-top: 13px; padding-bottom: 13px; }
+  td.w { font-size: 19px; }
+  td.big { font-size: 19px; font-weight: 600; color: var(--accent); }
+  .barcol { width: 34%; }
+  th.barcol { font-weight: 600; }
+  .bar { display: block; height: 10px; background: var(--accent); opacity: .82; border-radius: 1px; }
+</style>

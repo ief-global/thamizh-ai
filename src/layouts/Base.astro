@@ -1,0 +1,77 @@
+---
+import '../styles/site.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** The design-repo document this page derives from. Every page names one. */
+  derivesFrom?: { label: string; href: string }[];
+  noindex?: boolean;
+}
+const { title, description, derivesFrom = [], noindex = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+// `ready: false` sections are written but not built yet. They render as plain text rather
+// than as dead links, because a 404 on a site asking scholars for their trust is a bad look.
+const nav = [
+  { href: '/why', label: 'Why', ready: true },
+  { href: '/grammar', label: 'Grammar', ready: false },
+  { href: '/morphology', label: 'Morphology', ready: false },
+  { href: '/engine', label: 'Engine', ready: false },
+  { href: '/sources', label: 'Sources', ready: false },
+  { href: '/horizon', label: 'Horizon', ready: false },
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <link rel="preload" href="/fonts/noto-sans-tamil-tamil.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/noto-sans-tamil-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <meta name="theme-color" content="#7a1f2b" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="draft"><div class="wrap">
+    <b>Draft</b> &nbsp;·&nbsp; this site is being written in the open. Figures are verified; the prose is not final.
+  </div></div>
+
+  <div class="topbar"><div class="wrap row">
+    <a class="brand ta" href="/">தமிழ்<span class="ai">AI</span></a>
+    <nav aria-label="Sections">
+      {nav.map((n) => (
+        n.ready
+          ? <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a>
+          : <span class="soon" title="Being written">{n.label}</span>
+      ))}
+    </nav>
+  </div></div>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="site"><div class="wrap">
+    {derivesFrom.length > 0 && (
+      <p class="derives">
+        This page derives from {derivesFrom.map((d, i) => (
+          <>{i > 0 ? ' and ' : ''}<a href={d.href}>{d.label}</a></>
+        ))}. Where they disagree, the document wins and this page needs fixing.
+      </p>
+    )}
+    <p>
+      A project of the <a href="https://ief-global.org">International Educational Foundation</a>, a nonprofit.
+      Server code <a href="https://github.com/ief-global/thamizh-mcp">Apache-2.0</a>; the writing and diagrams here are CC BY-SA 4.0.
+    </p>
+    <p>
+      Classical texts from Project Madurai, header intact. Morphological analysis by
+      <a href="https://github.com/sarves/thamizhi-morph">ThamizhiMorph</a>, Sarveswaran, Dias and Butt 2021.
+      <a href="https://github.com/ief-global/thamizh-ai/blob/main/public/img/CREDITS.md">Image credits</a>.
+    </p>
+  </div></footer>
+</body>
+</html>

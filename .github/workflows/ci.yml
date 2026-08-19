@@ -1,0 +1,41 @@
+name: build
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+      # A hyperlinked site whose links rot is worse than no site. Fail the build on a
+      # relative href that does not resolve to a built page or a real file in dist/.
+      - name: Check internal links
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, sys
+          dist = pathlib.Path('dist')
+          bad = []
+          for page in dist.rglob('*.html'):
+              for href in re.findall(r'href="(/[^"#?]*)"', page.read_text(encoding='utf-8')):
+                  target = href.lstrip('/')
+                  if target == '':
+                      continue
+                  if (dist/target).exists() or (dist/(target + '.html')).exists() or (dist/target/'index.html').exists():
+                      continue
+                  bad.append(f"{page.relative_to(dist)} -> {href}")
+          if bad:
+              print("Dead internal links:")
+              print("\n".join(sorted(set(bad))))
+              sys.exit(1)
+          print("Internal links OK")
+          PY

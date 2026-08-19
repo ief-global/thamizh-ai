@@ -34,6 +34,12 @@ npm run dev      # http://localhost:4321
 npm run build    # static output in dist/
 ```
 
+`astro check` is not wired up yet: it wants `@astrojs/check` and `typescript` as extra
+dependencies, and at this size the build catches what matters. Add it when the site grows.
+
+```bash
+```
+
 Node 18+ (built on 22). No database, no API, no server runtime. It is static files.
 
 ## Layout

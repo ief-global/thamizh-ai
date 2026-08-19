@@ -1,0 +1,191 @@
+---
+import Base from '../layouts/Base.astro';
+import LayerStack from '../components/LayerStack.astro';
+import StatusStrip from '../components/StatusStrip.astro';
+
+const pages = {
+  core: [
+    ['/', 'What is this, and what is it made of?'],
+    ['/why', 'Why does a language this well documented count as low-resource?'],
+    ['/grammar', 'What makes an answer true here?'],
+    ['/morphology', 'How is a Tamil word taken apart?'],
+    ['/engine', 'What have we actually built? The nine tools and how they chain.'],
+    ['/sources', 'What do we ground on, and what may we use it for?'],
+    ['/distribution', 'How does it reach people?'],
+    ['/horizon', 'Where does this go, and what is not scheduled?'],
+    ['/status', 'What works today, measured?'],
+    ['/glossary', 'What does this term mean in Tamil grammar?'],
+    ['/about', 'Who is doing this, and how do I write to them?'],
+  ],
+  sources: [
+    ['/sources/thamizhimorph', 'The FST we wrap, and the wider Thamizhi suite. The build starts here.'],
+    ['/sources/project-madurai', 'The pinned Tholkappiyam and Nannūl every claim quotes.'],
+    ['/sources/tva', 'The கலைச்சொல் glossaries we are asking for.'],
+    ['/sources/aalamaram', 'The treebank we have adopted and not yet obtained.'],
+    ['/sources/ilakkanam', 'The benchmark we measure ourselves against.'],
+    ['/sources/madras-lexicon', 'Closed with a reason, published rather than hidden.'],
+  ],
+};
+---
+<Base
+  title="தமிழ்AI"
+  description="Grounding AI answers about Tamil in classical Tamil grammar. Every claim cites the நூற்பா behind it. A project of the International Educational Foundation."
+  derivesFrom={[
+    { label: 'DESIGN.md', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+    { label: 'CODE-STATUS.md', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md' },
+  ]}
+>
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">International Educational Foundation</div>
+      <p class="wordmark ta">தமிழ்<span class="ai">AI</span></p>
+      <h1>Two thousand years of Tamil grammar, in a form a machine can cite.</h1>
+      <p class="lede">
+        Tamil is called a low-resource language. The rules were never missing, the machine-readable
+        data was. We are building the grammar layer that sits under an AI: every claim names the
+        <span class="ta">நூற்பா</span> behind it, and when no source can ground an answer, it says so.
+      </p>
+      <div class="cta">
+        <a class="btn solid" href="#stack">How it is built</a>
+        <a class="btn" href="/why">Why it is needed</a>
+        <a class="btn" href="https://github.com/ief-global/thamizh-mcp">Code on GitHub</a>
+      </div>
+    </div>
+    <p class="credit">
+      <span class="ta">வட்டெழுத்து</span> inscription, Brihadeeswara temple, Thanjavur · CC0 ·
+      <a href="https://commons.wikimedia.org/wiki/File:Vattezhutthu_in_Thanjavur_Brihadeeswara_Temple.jpg">Wikimedia Commons</a>
+    </p>
+  </header>
+
+  <div class="leafband">
+    <img src="/img/tolkappiyam-palm-leaf.jpg" width="2153" height="177"
+         alt="A palm-leaf manuscript page of Tholkappiyam, written in Tamil script" />
+    <div class="wrap"><p class="leafcap">
+      <span>Palm-leaf manuscript of <span class="ta">தொல்காப்பியம்</span>, the text every grammar claim on this site quotes.</span>
+      <span>Public domain · <a href="https://commons.wikimedia.org/wiki/File:Tamil_palm-leaf_manuscript_of_Tolk%C4%81ppiyam.jpg">Wikimedia Commons</a></span>
+    </p></div>
+  </div>
+
+  <div class="wrap">
+    <div class="statwrap"><StatusStrip /></div>
+
+    <section id="stack">
+      <div class="sechead">
+        <p class="kicker">What it is made of</p>
+        <h2>Four layers, and a horizon we are honest about</h2>
+        <p>
+          Each layer only works because of the one above it, and the top layer feeds data back down.
+          Open a layer to see what its page carries, or ask for the fuller explanation.
+        </p>
+      </div>
+      <LayerStack />
+    </section>
+
+    <section class="join">
+      <div class="two">
+        <div>
+          <p class="cl">இலக்கணம் alone</p>
+          <p class="big">A book. It knows the rules, and it cannot apply them to the word you just typed.</p>
+        </div>
+        <div>
+          <p class="cl">Morphology alone</p>
+          <p class="big">A machine. It splits the word, and it cannot tell you which authority says the split is right.</p>
+        </div>
+      </div>
+      <p class="result">
+        Put them together and the answer is <b>computed and citable at the same time</b>.
+        That is the whole product, and everything else on this site is detail.
+      </p>
+    </section>
+
+    <section>
+      <div class="sechead">
+        <p class="kicker">The site</p>
+        <h2>Sixteen pages, each answering one question</h2>
+        <p>
+          Ten core pages carry the argument. Six more give each source and institution a page of its
+          own, so a letter can link one address instead of explaining itself.
+        </p>
+      </div>
+
+      <p class="grouplab">Core</p>
+      <div class="map">
+        {pages.core.map(([path, q]) => (
+          <div class="pg"><p class="path">{path}</p><p class="q ta">{q}</p></div>
+        ))}
+      </div>
+
+      <p class="grouplab">One page per source</p>
+      <div class="map">
+        {pages.sources.map(([path, q]) => (
+          <div class="pg"><p class="path">{path}</p><p class="q ta">{q}</p></div>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    position: relative; isolation: isolate; overflow: hidden;
+    background: var(--deep); color: var(--cream);
+    padding: clamp(64px, 13vh, 132px) 0 clamp(52px, 9vh, 96px);
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: -2;
+    background-image: url('/img/hero-thanjavur-inscription.jpg');
+    background-size: cover; background-position: center 38%;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(105deg, rgba(42,20,22,.94) 0%, rgba(42,20,22,.80) 46%, rgba(42,20,22,.42) 100%),
+      linear-gradient(to top, rgba(26,12,14,.72), rgba(26,12,14,0) 55%);
+  }
+  .hero .kicker { color: var(--ochre); }
+  .wordmark { font-size: clamp(50px, 9.5vw, 96px); font-weight: 700; line-height: .98;
+    margin: 16px 0 0; letter-spacing: -.015em; max-width: none; }
+  .wordmark .ai { color: #e9a0aa; }
+  .hero h1 { font-size: clamp(23px, 3.3vw, 34px); line-height: 1.32; margin: 24px 0 0; max-width: 19ch; }
+  .hero .lede { font-size: 18px; color: #e2d3c9; max-width: 58ch; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px 14px; margin: 30px 0 0;
+    font-family: var(--ui); font-size: 14.5px; }
+  .btn { display: inline-block; padding: 11px 20px; border: 1px solid rgba(247,240,232,.42);
+    color: var(--cream); text-decoration: none; border-radius: 2px; }
+  .btn:hover { background: rgba(247,240,232,.12); }
+  .btn.solid { background: var(--cream); color: #5d1621; border-color: var(--cream); font-weight: 600; }
+  .btn.solid:hover { background: #fff; }
+  .credit { position: absolute; right: 0; bottom: 0; margin: 0; max-width: none;
+    font-family: var(--ui); font-size: 11px; color: rgba(247,240,232,.62);
+    padding: 8px 14px; background: rgba(26,12,14,.5); }
+  .credit a { color: rgba(247,240,232,.86); }
+
+  .leafband { background: #efe6d6; border-bottom: 1px solid var(--line); }
+  .leafband img { width: 100%; height: clamp(74px, 11vw, 116px); object-fit: cover; }
+  .leafcap { font-family: var(--ui); font-size: 12px; color: #6b5c47; max-width: none;
+    margin: 0; padding: 9px 0 11px; display: flex; flex-wrap: wrap;
+    gap: 4px 14px; justify-content: space-between; }
+  .leafcap a { color: #7a1f2b; }
+
+  .statwrap { margin: clamp(38px, 6vh, 60px) 0 0; }
+
+  .join { border-top: 2px solid var(--accent); border-bottom: 1px solid var(--line); padding: 28px 0; }
+  .join .two { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+  .join .cl { font-family: var(--ui); font-size: 11px; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 10px; }
+  .join .big { font-size: clamp(18px, 2.3vw, 22px); line-height: 1.5; max-width: 34ch; margin: 0; }
+  .join .result { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line);
+    max-width: 56ch; font-size: clamp(18px, 2.3vw, 22px); line-height: 1.5; }
+  .join .result b { color: var(--accent); font-weight: 600; }
+
+  .grouplab { font-family: var(--ui); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 26px 0 10px; }
+  .map { display: grid; grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .pg { background: var(--card); padding: 15px 17px; }
+  .pg .path { font-family: var(--mono); font-size: 12.5px; color: var(--accent2);
+    font-weight: 600; overflow-wrap: anywhere; margin: 0; }
+  .pg .q { font-size: 14px; color: var(--muted); margin: 6px 0 0; line-height: 1.45; }
+
+  @media (max-width: 640px) { .join .two { grid-template-columns: 1fr; gap: 24px; } }
+</style>

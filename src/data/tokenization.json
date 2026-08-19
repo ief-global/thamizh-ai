@@ -1,0 +1,14 @@
+{
+  "_comment": "Our own measurement, not a quoted claim. Re-run scripts/measure-tokens.py to refresh. Every Tamil form here also appears in the design repo, verified against the live build.",
+  "measured_on": "2026-08-18",
+  "tool": "tiktoken 0.14.0",
+  "encodings": ["cl100k_base", "o200k_base"],
+  "rows": [
+    { "tamil": "மரம்", "english": "tree", "morphemes": 1, "chars": 4, "cl100k": 7, "o200k": 2, "en_o200k": 1 },
+    { "tamil": "மரத்தில்", "english": "in the tree", "morphemes": 3, "chars": 8, "cl100k": 11, "o200k": 3, "en_o200k": 3 },
+    { "tamil": "வந்தான்", "english": "he came", "morphemes": 3, "chars": 7, "cl100k": 11, "o200k": 3, "en_o200k": 2 },
+    { "tamil": "வருகிறான்", "english": "he is coming", "morphemes": 3, "chars": 9, "cl100k": 14, "o200k": 3, "en_o200k": 3 },
+    { "tamil": "கொடுத்தான்", "english": "he gave", "morphemes": 3, "chars": 10, "cl100k": 16, "o200k": 4, "en_o200k": 2 },
+    { "tamil": "படித்துக்கொண்டிருந்தார்கள்", "english": "they were reading", "morphemes": null, "chars": 26, "cl100k": 35, "o200k": 7, "en_o200k": 3 }
+  ]
+}
