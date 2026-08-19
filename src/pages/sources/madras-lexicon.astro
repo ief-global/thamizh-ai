@@ -1,0 +1,90 @@
+---
+import SourcePage from '../../layouts/SourcePage.astro';
+---
+<SourcePage
+  title="Madras Tamil Lexicon"
+  description="The most authoritative Tamil lexicon there is, and why this project does not use it."
+  registryKey="madras_tamil_lexicon"
+  english="Madras Tamil Lexicon"
+  state="closed"
+  lede="The most authoritative Tamil lexicon in existence, compiled at the University of Madras between 1924 and 1936. We may consult it and cite it. We may not bundle a line of it, and we have not."
+  facts={[
+    { label: 'Compiled', value: 'University of Madras, 1924–1936' },
+    { label: 'Digitised by', value: 'Digital South Asia Library, University of Chicago' },
+    { label: 'Licence', value: 'CC BY-NC-ND 2.0' },
+    { label: 'Our status', value: 'Adapter exists as a stub and is off. Nothing has been scraped.' },
+  ]}
+  derivesFrom={[
+    { label: 'DECISIONS.md D-016', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+    { label: 'the drafted letter to DSAL', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/sources/correspondence/2026-08-08-dsal-uchicago.md' },
+  ]}
+>
+  <section>
+    <h2>Two separate walls</h2>
+    <p>
+      <b>The licence.</b> CC BY-NC-ND has two clauses that both bite. <i>NonCommercial</i> bites
+      because our code is Apache-2.0 and anybody may run this server commercially, which we cannot
+      prevent and would not want to. <i>NoDerivatives</i> bites because a restructured, indexed copy
+      inside a knowledge store is plausibly a derivative work, and "plausibly" is not a standard we
+      are willing to ship on.
+    </p>
+    <p>
+      <b>The robots file.</b> The only query endpoint is disallowed to automated clients. So even the
+      narrow reading, look a word up at query time and store nothing but the fact and the citation,
+      is not available to us without asking.
+    </p>
+    <p class="note">
+      We noticed the rule and did not scrape. That is worth stating plainly, because it is the
+      difference between a request and a fait accompli, and because the alternative is available to
+      anyone with an afternoon and no scruples.
+    </p>
+  </section>
+
+  <section>
+    <h2>Why this source is the reason for our whole grading model</h2>
+    <p>
+      This lexicon is <b>grade A and consult-and-cite at the same time</b>. It is the most
+      authoritative source we could possibly have and the most restrictively licensed one we hold.
+    </p>
+    <p>
+      A system with a single field for "how good is this source" has to lie about one of those. So
+      ours has two: evidential grade, and what we are legally allowed to do with the bytes. They move
+      independently. That design came directly out of running into this entry, and it later caught a
+      more embarrassing case in the other direction, a word list we depended on whose licence turned
+      out to be nothing at all.
+    </p>
+  </section>
+
+  <section>
+    <h2>What we asked, and what we already know</h2>
+    <p>A letter to the Digital South Asia Library is drafted, with one question and one request:</p>
+    <ol class="asks">
+      <li>
+        <b>Does the digitised edition carry machine-readable etymology fields?</b> We cannot check,
+        because those pages are the ones we are not fetching. This question matters more than the
+        permission does.
+      </li>
+      <li>
+        <b>Permission for rate-limited programmatic queries</b>, storing derived claims and citations
+        only, never the lexicon's own wording.
+      </li>
+    </ol>
+    <p>
+      The first question is first for a reason. We assessed the other digitisation of the same
+      lexicon and found glosses without etymology. If this edition is the same, permission buys us
+      very little, and it would be a waste of an institution's goodwill to ask for something we do
+      not need.
+    </p>
+    <p class="note">
+      Meanwhile the honest position holds: where a borrowed word carries no orthographic marker, this
+      project returns <b>unknown</b> rather than a plausible etymology. Some of those unknowns would
+      close immediately if this door opened.
+      <a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a>
+    </p>
+  </section>
+</SourcePage>
+
+<style>
+  .asks { margin: 16px 0 0; padding-left: 22px; max-width: var(--measure); }
+  .asks li { margin: 12px 0; }
+</style>

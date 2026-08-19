@@ -1,0 +1,91 @@
+---
+import SourcePage from '../../layouts/SourcePage.astro';
+
+const cats = [
+  ['L1', 'Phonetics'], ['L2', 'Phonology'], ['L3', 'Morphology'],
+  ['L4', 'Syntax'], ['L5', 'Semantics'], ['F', 'Factual'],
+];
+---
+<SourcePage
+  title="ILAKKANAM"
+  description="The first Tamil linguistics benchmark, and how this project would measure whether it helps."
+  english="ILAKKANAM"
+  state="asked-for"
+  lede="The first benchmark that tests a model on Tamil linguistics rather than on translation. 820 school examination questions, Grades 1 to 13, from the University of Jaffna. It is how we would find out whether any of this actually helps."
+  facts={[
+    { label: 'Paper', value: 'From Phonemes to Meaning: Evaluating LLMs on Tamil (arXiv:2511.12387)' },
+    { label: 'From', value: 'University of Jaffna' },
+    { label: 'Size', value: '820 questions, Grades 1–13, six categories' },
+    { label: 'Status', value: 'The dataset was not public when we last checked' },
+  ]}
+  derivesFrom={[
+    { label: 'DESIGN.md §12', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+    { label: 'DECISIONS.md D-005', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+  ]}
+>
+  <section>
+    <h2>What it found</h2>
+    <div class="cats">{cats.map(([k, n]) => (<span class="cat"><b>{k}</b> {n}</span>))}</div>
+    <ul class="findings">
+      <li>The best frontier model scored <b>79.6%</b>. Claude Sonnet 4.5 scored 71.1%. Open-source models scored between 37.9% and 60.7%.</li>
+      <li>Accuracy <b>falls as the school grade rises</b>, which is the opposite of what understanding would predict.</li>
+      <li>Whether a model can correctly <b>name</b> the linguistic category of a question does not predict whether it answers correctly.</li>
+    </ul>
+    <p>
+      The authors' conclusion is the sentence this project turns on: the performance reflects
+      <b> exposure, not understanding</b>. A model has read a great deal of Tamil. It has not been
+      taught any <span class="ta">இலக்கணம்</span>.
+    </p>
+    <p>
+      Their morphology category is where our tools do their work, and their finding that accuracy
+      collapses on harder items is the shape of problem a lookup layer can fix and a larger model
+      cannot.
+    </p>
+  </section>
+
+  <section>
+    <h2>How we would use it</h2>
+    <p>
+      The measurement that matters for this project is not our own test suite passing. It is whether a
+      model answers Tamil linguistics questions <b>better with these tools attached than without
+      them</b>. Same model, same questions, tools on and tools off, scored per category and grade
+      band.
+    </p>
+    <p>
+      That number is the honest test of whether the project deserves anyone's attention, and we do not
+      have it yet. We built the harness, ran a smoke test, and stopped.
+    </p>
+    <p class="note">
+      <b>The smoke test found something more useful than a score.</b> Under a neutral prompt, a model
+      with the tools attached called them <b>0% of the time</b>. The server was returning correct
+      answers. Nothing was telling the model to ask. Tool descriptions turned out to be a product
+      surface rather than documentation, and "did the model call the tool at all" is now a permanent
+      evaluation metric rather than a bug we fixed once.
+    </p>
+  </section>
+
+  <section>
+    <h2>What we are asking</h2>
+    <p>
+      Access to the dataset, or word when it publishes. Until then we test against fixtures we wrote
+      ourselves, which are useful for catching regressions and are not an independent measurement,
+      because we wrote both the questions and the thing being tested.
+    </p>
+    <p>
+      If it publishes, it becomes our held-out test set and our own fixtures get demoted to
+      development data. We would also want to check the reverse direction: our fixture words are
+      flagged in the store so that they can never leak into any dataset we publish, and a benchmark
+      is only worth something while it stays uncontaminated.
+      <a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a>
+    </p>
+  </section>
+</SourcePage>
+
+<style>
+  .cats { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; }
+  .cat { font-family: var(--ui); font-size: 12.5px; color: var(--muted); border: 1px solid var(--line);
+    padding: 4px 11px; border-radius: 2px; }
+  .cat b { color: var(--accent); margin-right: 5px; }
+  .findings { margin: 20px 0 0; padding-left: 20px; max-width: var(--measure); }
+  .findings li { margin: 10px 0; }
+</style>

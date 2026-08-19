@@ -1,0 +1,150 @@
+---
+import SourcePage from '../../layouts/SourcePage.astro';
+
+const suite = [
+  { repo: 'thamizhi-morph', name: 'ThamizhiMorph', licence: 'Apache-2.0',
+    what: 'Morphological analyser and generator. The FST we wrap.',
+    us: 'In use since day one. The analysis direction only.' },
+  { repo: 'thamizhi-preprocessor', name: 'Thamizhi Validator', licence: 'no stated licence',
+    what: 'Checks whether a string is a well-formed Tamil word.',
+    us: 'Named in our design as the native-versus-borrowed signal, still unwired. It is our top open code item.' },
+  { repo: 'thamizhi-pos', name: 'ThamizhiPOSt', licence: 'Apache-2.0',
+    what: 'Neural part-of-speech tagger for Tamil.',
+    us: 'Needed for sentence support, where context decides which reading of a word is right.' },
+  { repo: 'thamizhilip', name: 'ThamizhiLIP', licence: 'Apache-2.0',
+    what: 'Linguistic processing pipeline.',
+    us: 'Same track as the tagger.' },
+  { repo: 'thamizhi-udp', name: 'ThamizhiUDp', licence: 'no stated licence',
+    what: 'Universal Dependencies parser for Tamil.',
+    us: 'The stage after sentence segmentation, where we would ask what grammatical slot comes next.' },
+];
+---
+<SourcePage
+  title="ThamizhiMorph"
+  description="The finite-state morphological analyser this project wraps, by Sarveswaran, Dias and Butt. Where the build starts."
+  registryKey="thamizhimorph"
+  english="ThamizhiMorph"
+  state="pinned"
+  lede="The morphological analyser everything here stands on. Published research, Apache-2.0, pinned by commit. We wrap it, and building a second one would have been a worse use of the same years."
+  facts={[
+    { label: 'Authors', value: 'K. Sarveswaran, Gihan Dias, Miriam Butt' },
+    { label: 'Published', value: 'Machine Translation 35:37–70 (2021), Springer' },
+    { label: 'DOI', value: '10.1007/s10590-021-09261-5' },
+    { label: 'Code', value: 'github.com/sarves/thamizhi-morph' },
+  ]}
+  derivesFrom={[
+    { label: 'DECISIONS.md D-001 and D-002', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+    { label: 'DESIGN.md §12', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+  ]}
+>
+  <section>
+    <h2>What it is</h2>
+    <p>
+      A finite-state transducer for Tamil morphology: give it a word and it returns the analysis, give
+      it a lemma and a set of features and it returns the word. It is built on
+      <span class="ta"> வாய்பாடு</span>-style paradigms rather than on statistics, which is why its
+      answers can be checked against a grammar rather than only against a test set.
+    </p>
+    <p>Its own measured results, from the paper, on a 612-word textbook corpus:</p>
+    <div class="status">
+      <div class="stat"><div class="v">93.3<span class="of">%</span></div><div class="l">analysis coverage</div></div>
+      <div class="stat"><div class="v">100<span class="of">%</span></div><div class="l">right analysis, among successes</div></div>
+      <div class="stat"><div class="v">97.9<span class="of">%</span></div><div class="l">right lemma, among successes</div></div>
+    </div>
+    <p class="verified">
+      The residual errors are mostly words the lexicon has never seen. Those route into our enrichment
+      loop rather than into a guess.
+    </p>
+  </section>
+
+  <section>
+    <h2>How we use it, and how we do not</h2>
+    <p>
+      It is the primary morphology anchor in the engine, pinned by commit so an upstream change cannot
+      silently alter an answer we have already published.
+    </p>
+    <p>
+      <b>We keep the guesser transducers switched off.</b> They will produce an analysis for a word the
+      lexicon has never seen, and on <span class="ta">கொடு</span> that means returning the lemma
+      <span class="ta"> கொடுத்</span>. A confident wrong answer is the one failure mode this project
+      exists to remove, so we would rather return a gap. That is a compliment to the tool's design,
+      which makes the guessers a separate opt-in rather than a default.
+    </p>
+    <p>
+      And there is an ordering rule that matters more than any of this: <b>where the analyser and a
+      <span class="ta">நூற்பா</span> disagree, the <span class="ta">நூற்பா</span> governs.</b> The FST
+      is graded B rather than A for exactly that reason. It is a computational model of the grammar,
+      not the grammar.
+    </p>
+    <p>
+      One direction of the transducer is unused. It can build words as well as take them apart, and
+      that unused direction is the whole of our long-term track: a system that knows what to say could
+      hand over a lemma and a feature bundle and receive correct Tamil, rather than spelling out an
+      inflected form it has only seen in fragments.
+    </p>
+  </section>
+
+  <section>
+    <h2>The wider Thamizhi suite</h2>
+    <p>
+      ThamizhiMorph is one piece of a larger body of Tamil NLP work from the same group. Several of
+      the others are already named in our design as prerequisites for things we have not built. This
+      is what we would reach for and when.
+    </p>
+    <div class="scroll-x">
+      <table class="plain suite">
+        <thead><tr><th>Project</th><th>What it does</th><th>Where it lands for us</th><th>Licence</th></tr></thead>
+        <tbody>
+          {suite.map((s) => (
+            <tr>
+              <td class="nm">{s.name}<span class="repo">sarves/{s.repo}</span></td>
+              <td>{s.what}</td>
+              <td class="muted">{s.us}</td>
+              <td class="muted lic">{s.licence}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="src">
+      Repository names and stated licences read from github.com/sarves on 2026-08-19. Two of them
+      carry no licence file, which is a question rather than a complaint: we would need to ask before
+      depending on either.
+    </p>
+    <p>
+      The same group also co-authored <a href="/sources/aalamaram">Aalamaram</a>, the Tamil treebank
+      we have adopted and not yet obtained, and published work on tokenizers for under-represented
+      languages, which is the argument our own <a href="/why">why page</a> makes from the other end.
+    </p>
+  </section>
+
+  <section>
+    <h2>What we would ask</h2>
+    <p>
+      Nothing about licensing. Apache-2.0 is clear and we are inside it. Three questions, if the
+      authors ever have the time:
+    </p>
+    <ol class="asks">
+      <li>Where is the <a href="/sources/aalamaram">Aalamaram</a> data distributed, and under what terms? We could not find it from here.</li>
+      <li>Is our reading right that ThamizhiPOSt and ThamizhiLIP are the correct route to word-in-context disambiguation, rather than something newer?</li>
+      <li>Would a corrected list of the analyser's misses, gathered from real use and hand-checked, be useful upstream? We accumulate them anyway.</li>
+    </ol>
+    <p class="note">
+      Question 3 is the one we care about. This project produces verified data as a by-product, and
+      the work it is built on should get first refusal on any of it.
+      <a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a>
+    </p>
+  </section>
+</SourcePage>
+
+<style>
+  .verified { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin-top: 11px; }
+  .src { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+  table.suite { min-width: 680px; margin-top: 20px; }
+  .suite .nm { font-weight: 600; font-size: 15.5px; }
+  .suite .repo { display: block; font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    font-weight: 400; margin-top: 4px; }
+  .suite .lic { font-size: 13px; }
+  .asks { margin: 16px 0 0; padding-left: 22px; max-width: var(--measure); }
+  .asks li { margin: 10px 0; }
+</style>

@@ -1,0 +1,197 @@
+---
+import Base from '../layouts/Base.astro';
+import s from '../data/sources.json';
+
+const pages: Record<string, string> = {
+  thamizhimorph: '/sources/thamizhimorph',
+  tholkappiyam: '/sources/project-madurai',
+  nannul: '/sources/project-madurai',
+  kalaichol: '/sources/tva',
+  madras_tamil_lexicon: '/sources/madras-lexicon',
+};
+const order = [
+  'tholkappiyam', 'nannul', 'curated_rule_tables', 'thamizhimorph', 'curated_verb_paradigms',
+  'english_loanwords_dakshina', 'tamil_wiktionary', 'en_wiktionary_etymology', 's2pt',
+  'kalaichol', 'madras_tamil_lexicon',
+];
+const rows = order.map((k) => ({ key: k, ...(s.sources as Record<string, any>)[k] }));
+
+const asks = [
+  { href: '/sources/tva', ta: 'தமிழ் இணையக் கல்விக்கழகம்', name: 'Tamil Virtual Academy',
+    what: 'The கலைச்சொல் glossaries, in machine-readable form, and a licence statement for the archive.',
+    why: 'It would retire the one genuine licence gap this project ships.' },
+  { href: '/sources/aalamaram', ta: 'ஆலமரம்', name: 'Aalamaram',
+    what: 'Where the treebank is distributed, and under what terms.',
+    why: 'Ten thousand annotated sentences would let us check our morphology at scale instead of one word at a time.' },
+  { href: '/sources/ilakkanam', ta: '', name: 'ILAKKANAM',
+    what: 'The benchmark dataset, or word when it publishes.',
+    why: 'It is how we would measure whether any of this actually helps.' },
+];
+---
+<Base
+  title="மூலம், the sources"
+  description="Every source this project grounds on, with its evidential grade and what we are legally allowed to do with it, kept as separate questions."
+  derivesFrom={[
+    { label: 'the source registry', href: 'https://github.com/ief-global/thamizh-mcp/blob/main/data/sources.json' },
+    { label: 'DECISIONS.md D-016 and D-017', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+  ]}
+>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="kicker">Layer 3</p>
+      <h1 class="ta">மூலம் <span class="en">sources</span></h1>
+      <p class="lede">
+        What this project grounds on, what we still need, and what we may not use. Every source
+        answers two questions that are kept apart on purpose, because collapsing them causes mistakes
+        in both directions.
+      </p>
+    </header>
+
+    <section>
+      <h2>Two questions, never one</h2>
+      <div class="axes">
+        <div class="axis">
+          <p class="al">How good is the evidence?</p>
+          <dl>{Object.entries(s.grades).map(([k, v]: [string, any]) => (
+            <><dt>{k}</dt><dd>{v.means}</dd></>
+          ))}</dl>
+        </div>
+        <div class="axis">
+          <p class="al">What may we do with it?</p>
+          <dl>{Object.entries(s.redistribution_modes).map(([k, v]: [string, any]) => (
+            <><dt class="mode">{k}</dt><dd>{v}</dd></>
+          ))}</dl>
+        </div>
+      </div>
+      <p class="note">
+        <b>The Madras Tamil Lexicon is why these are separate axes.</b> It is the most authoritative
+        lexicon in existence for Tamil and the most restrictively licensed. Grade A, and
+        consult-and-cite. Both true at once, and a system that had only one field for "how good is
+        this source" would have to lie about one of them.
+      </p>
+      <p>
+        A grade D source is fine to ship, as long as the answer says it is grade D. Authenticity
+        comes from every claim carrying a graded, citable provenance a reader can check, rather than
+        from every source being impeccable.
+      </p>
+    </section>
+
+    <section>
+      <h2>The ledger</h2>
+      <p>
+        Eleven sources, copied from the server's own registry. Where a source has its own page, the
+        name links to it.
+      </p>
+      <div class="scroll-x">
+        <table class="plain ledger">
+          <thead>
+            <tr><th>Source</th><th>Grade</th><th>Tier</th><th>What we may do</th><th>Licence</th></tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td class="ta nm">{pages[r.key] ? <a href={pages[r.key]}>{r.name}</a> : r.name}</td>
+                <td><span class:list={['g', `g-${r.grade}`]}>{r.grade}</span></td>
+                <td class="muted">{r.tier}</td>
+                <td class="mode">{r.redistribution}</td>
+                <td class="muted lic">{r.licence}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="src">
+        Registry last updated {s.registry_updated}, copied here {s.synced_on} by
+        <code>scripts/sync-sources.py</code>. It is not retold, so it cannot read softer here than it
+        does in the code.
+      </p>
+    </section>
+
+    <section>
+      <h2>The one licence gap we ship</h2>
+      <p>
+        The <span class="ta">தனித்தமிழ்</span> word lists we use for native equivalents have
+        <b> no stated licence</b>. No LICENSE file, no terms in the README, and no upstream commit
+        since 2020. An earlier claim that they were MIT was withdrawn when nobody could find the
+        basis for it.
+      </p>
+      <p>
+        We could quietly drop the sentence and most readers would never know. It stays because the
+        whole argument of this project is that a claim you cannot check is worth nothing, and that
+        has to apply to our own claims first. The fix is not a better disclaimer. It is an
+        authenticated glossary, which is exactly what we are asking
+        <a href="/sources/tva">the Tamil Virtual Academy</a> for.
+      </p>
+    </section>
+
+    <section>
+      <h2>What we are asking for</h2>
+      <p>
+        Three open asks. Each has a page saying what we want, what we would do with it, and what we
+        would give back, so that a letter can link one address instead of explaining itself.
+      </p>
+      <div class="asks">
+        {asks.map((a) => (
+          <a class="ask" href={a.href}>
+            <p class="an">{a.ta && <span class="ta">{a.ta} </span>}<span class="lat">{a.name}</span></p>
+            <p class="aw ta">{a.what}</p>
+            <p class="ay">{a.why}</p>
+          </a>
+        ))}
+      </div>
+      <p class="note">
+        If you hold one of these, or know who does, we would rather hear from you than keep guessing.
+        Write to <a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Closed, with the reason published</h2>
+      <p>
+        The <a href="/sources/madras-lexicon">Madras University Tamil Lexicon</a> is the source we
+        most want and cannot have. Publishing why, rather than staying vague about which lexicon we
+        consulted, is the same discipline as returning an honest gap.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(40px, 7vh, 72px) 0 0; }
+  .pagehead h1 { font-size: clamp(30px, 4.6vw, 46px); line-height: 1.15; margin: 12px 0 0; }
+  .pagehead h1 .en { font-family: var(--ui); font-size: 17px; color: var(--muted);
+    font-weight: 400; margin-left: 12px; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .src { font-family: var(--ui); font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+  .src code, code { font-family: var(--mono); font-size: .92em; }
+
+  .axes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px; margin: 22px 0 0; }
+  .al { font-family: var(--ui); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin: 0; }
+  .axes dl { margin: 12px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; }
+  .axes dt { font-family: var(--ui); font-weight: 600; font-size: 13px; color: var(--ink);
+    border: 1px solid var(--line); padding: 1px 8px; height: fit-content; border-radius: 2px; }
+  .axes dt.mode { font-size: 11px; letter-spacing: .04em; }
+  .axes dd { margin: 0; font-size: 14.5px; color: var(--muted); line-height: 1.5; }
+
+  table.ledger { min-width: 700px; margin-top: 20px; }
+  .ledger .nm { font-size: 16px; }
+  .ledger .lic { font-size: 13px; max-width: 34ch; }
+  .ledger .mode { font-family: var(--ui); font-size: 12px; }
+  .g { font-family: var(--ui); font-weight: 700; font-size: 13px; border: 1px solid var(--line);
+    padding: 1px 8px; border-radius: 2px; }
+  .g-A { color: var(--ok); border-color: var(--ok); }
+  .g-B { color: var(--accent2); border-color: var(--accent2); }
+  .g-C { color: var(--ochre); border-color: var(--ochre); }
+  .g-D { color: var(--warn); border-color: var(--warn); }
+
+  .asks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 22px 0 0; }
+  .ask { display: block; border: 1px solid var(--line); border-top: 4px solid var(--ochre);
+    background: var(--card); padding: 16px 18px; text-decoration: none; color: var(--ink); }
+  .ask:hover { background: var(--sunk); }
+  .an { margin: 0; font-size: 18px; font-weight: 600; }
+  .an .lat { font-family: var(--ui); font-size: 15px; color: var(--muted); font-weight: 500; }
+  .aw { margin: 10px 0 0; font-size: 14.5px; }
+  .ay { margin: 8px 0 0; font-size: 13px; color: var(--muted); font-family: var(--ui); line-height: 1.45; }
+</style>
