@@ -1,0 +1,103 @@
+---
+import Base from './Base.astro';
+import sources from '../data/sources.json';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Key in src/data/sources.json, when this source is in the registry. */
+  registryKey?: string;
+  tamil?: string;
+  english: string;
+  lede: string;
+  /** pinned | asked-for | closed */
+  state: 'pinned' | 'asked-for' | 'closed';
+  facts: { label: string; value: string }[];
+  derivesFrom?: { label: string; href: string }[];
+}
+const { title, description, registryKey, tamil, english, lede, state, facts, derivesFrom = [] } = Astro.props;
+const entry = registryKey ? (sources.sources as Record<string, any>)[registryKey] : null;
+const stateLabel = { 'pinned': 'Pinned and in use', 'asked-for': 'Asked for, not yet held', 'closed': 'Closed, with a reason' }[state];
+---
+<Base title={title} description={description} derivesFrom={derivesFrom}>
+  <div class="wrap">
+    <header class="pagehead">
+      <p class="crumb"><a href="/sources">Layer 3 · <span class="ta">மூலம்</span></a></p>
+      <h1>{tamil ? <span class="ta">{tamil}</span> : english}{tamil && <span class="en">{english}</span>}</h1>
+      <p class="lede">{lede}</p>
+
+      <div class="chips">
+        <span class:list={['chip', `st-${state}`]}>{stateLabel}</span>
+        {entry && <span class="chip">Grade {entry.grade}</span>}
+        {entry && <span class="chip">{entry.redistribution}</span>}
+        {entry && <span class="chip">{entry.tier} tier</span>}
+      </div>
+    </header>
+
+    <div class="facts">
+      {facts.map((f) => (
+        <div class="fact">
+          <p class="fl">{f.label}</p>
+          <p class="fv ta">{f.value}</p>
+        </div>
+      ))}
+    </div>
+
+    <slot />
+
+    {entry && (
+      <section class="registry">
+        <h2>What the registry records</h2>
+        <p>
+          This is copied from the server's own source registry rather than restated, so it cannot be
+          softer here than it is in the code.
+        </p>
+        <dl>
+          <dt>Licence</dt><dd>{entry.licence}</dd>
+          <dt>What we may do with it</dt><dd>{sources.redistribution_modes[entry.redistribution]}</dd>
+          <dt>Evidential grade</dt><dd>{sources.grades[entry.grade].means} Confidence is capped at {sources.grades[entry.grade].confidence_cap}.</dd>
+          {entry.pin && <><dt>Pin</dt><dd class="mono">{entry.pin}</dd></>}
+          {entry.maintenance && <><dt>Maintenance</dt><dd>{entry.maintenance}</dd></>}
+          {entry.attribution && <><dt>Attribution</dt><dd>{entry.attribution}</dd></>}
+          {entry.adapter_status && <><dt>Status in the server</dt><dd>{entry.adapter_status}</dd></>}
+        </dl>
+        {entry.notes && <p class="rnote ta">{entry.notes}</p>}
+      </section>
+    )}
+  </div>
+</Base>
+
+<style>
+  .pagehead { margin: clamp(36px, 6vh, 60px) 0 0; }
+  .crumb { font-family: var(--ui); font-size: 13px; margin: 0; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .crumb a:hover { color: var(--accent); }
+  .pagehead h1 { font-size: clamp(28px, 4.4vw, 44px); line-height: 1.15; margin: 10px 0 0; }
+  .pagehead h1 .en { font-family: var(--ui); font-size: 16px; color: var(--muted);
+    font-weight: 400; margin-left: 12px; }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 18px 0 0; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; }
+  .chip { font-family: var(--ui); font-size: 11.5px; letter-spacing: .06em; color: var(--muted);
+    border: 1px solid var(--line); padding: 4px 10px; border-radius: 2px; }
+  .chip.st-pinned { color: var(--ok); border-color: var(--ok); }
+  .chip.st-asked-for { color: var(--ochre); border-color: var(--ochre); }
+  .chip.st-closed { color: var(--warn); border-color: var(--warn); }
+
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 28px 0 0; }
+  .fact { background: var(--card); padding: 14px 16px; }
+  .fl { font-family: var(--ui); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); margin: 0; }
+  .fv { font-size: 15px; margin: 7px 0 0; line-height: 1.45; }
+
+  .registry dl { display: grid; grid-template-columns: minmax(150px, 200px) 1fr; gap: 1px;
+    background: var(--line); border: 1px solid var(--line); margin: 22px 0 0; }
+  .registry dt { background: var(--card); padding: 12px 16px; font-family: var(--ui);
+    font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .registry dd { background: var(--card); padding: 12px 16px; margin: 0; font-size: 15px; }
+  .registry dd.mono { font-family: var(--mono); font-size: 12.5px; overflow-wrap: anywhere; }
+  .rnote { border-left: 3px solid var(--warn); padding-left: 16px; color: var(--muted);
+    font-size: 15px; margin: 20px 0 0; }
+  @media (max-width: 620px) { .registry dl { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,107 @@
+---
+import SourcePage from '../../layouts/SourcePage.astro';
+import status from '../../data/status.json';
+const v = status.figures.classical_verses;
+---
+<SourcePage
+  title="Project Madurai"
+  description="The pinned editions of Tholkappiyam and Nannūl that every grammar claim on this project quotes."
+  registryKey="tholkappiyam"
+  english="Project Madurai"
+  state="pinned"
+  lede="The volunteers who put classical Tamil into electronic form and gave it away. Every நூற்பா this project quotes comes from their editions, pinned by checksum and read while the server runs."
+  facts={[
+    { label: 'What we pinned', value: `தொல்காப்பியம், ${v.tholkappiyam} நூற்பா · நன்னூல், ${v.nannul} நூற்பா` },
+    { label: 'Pinned on', value: '2026-08-02, with a sha256 recorded for each file' },
+    { label: 'Terms', value: 'Free distribution, provided their header travels with the text' },
+    { label: 'Credit', value: '© Project Madurai 1999–2001 · etext Dr. K. Kalyanasundaram · proof-reading N. D. Logasundaram' },
+  ]}
+  derivesFrom={[
+    { label: 'DECISIONS.md D-011 and D-018', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+    { label: 'the pinned texts', href: 'https://github.com/ief-global/thamizh-mcp/tree/main/data/classical' },
+  ]}
+>
+  <figure class="leaf">
+    <img src="/img/tolkappiyam-palm-leaf.jpg" width="2153" height="177"
+         alt="A palm-leaf manuscript page of Tholkappiyam, written in Tamil script" />
+    <figcaption>
+      A palm-leaf manuscript of <span class="ta">தொல்காப்பியம்</span>. Public domain, via
+      <a href="https://commons.wikimedia.org/wiki/File:Tamil_palm-leaf_manuscript_of_Tolk%C4%81ppiyam.jpg">Wikimedia Commons</a>,
+      uploaded from the Tamil Virtual Academy's collection. The chain from this to a checksummed
+      file is the whole subject of this page.
+    </figcaption>
+  </figure>
+
+  <section>
+    <h2>Why an edition has to be pinned</h2>
+    <p>
+      A grammar claim that cites "Tholkappiyam" and stops there cannot be checked. Editions differ,
+      numbering differs, and a reader who wants to disagree with us needs to know exactly which text
+      to open.
+    </p>
+    <p>
+      So both works are stored as version-locked artifacts with a checksum, rebuildable from source
+      by a script that verifies what it produces. If an upstream file ever changed, the build would
+      fail rather than quietly serving a different verse.
+    </p>
+    <p class="note">
+      <b>And the numbering is a genuine trap.</b> The Tamil Virtual Academy course books quote Nannūl
+      selectively and renumber: their 336, 319 and 136 are <b>337, 320 and 137</b> in this edition.
+      All three were wrong in our tables before the full texts were pinned. Nothing was careless
+      about how they got there, which is the point. A number read from an accredited secondary source
+      looks exactly like a number read from the text.
+    </p>
+  </section>
+
+  <section>
+    <h2>The texts are read while the server runs</h2>
+    <p>
+      For a while these files were opened only by a test, which checked that every verse number we
+      cited actually existed. That is a real guarantee, and it is not the one a reader wants. Asking
+      "on whose authority?" returned a chapter name.
+    </p>
+    <p>
+      Now the pinned editions are read at answer time, so a claim carries the
+      <span class="ta"> நூற்பா</span> itself and the app shows it with this credit attached. A
+      citation tells a scholar where to look. The verse shows them.
+    </p>
+    <p>
+      One consequence is deliberate: there is <b>no way to ask for a Tholkappiyam verse by bare
+      number</b> anywhere in the code. Its numbers restart in every <span class="ta">இயல்</span> and
+      collide, so the function requires <span class="ta">அதிகாரம்</span> and
+      <span class="ta"> இயல்</span> too. A bare number is a bug rather than a shortcut, and the
+      interface refuses to accept one. Nannūl runs continuously, so a bare number there is fine.
+    </p>
+    <p>
+      Verses are also never retyped, in the code or on this site. They are quoted programmatically
+      from the pinned files, because a transcription drifts within minutes of being read and the
+      drift is invisible. That rule caught five verses drifting during a single session.
+    </p>
+  </section>
+
+  <section>
+    <h2>What we owe them</h2>
+    <p>
+      Project Madurai's terms are simple: distribute freely, keep the header intact. We do, in the
+      code repository and wherever a verse is displayed. It costs nothing and it is the entire price
+      of work that took volunteers years.
+    </p>
+    <p>
+      If you find an error in a verse as we serve it, it is worth telling both of us. Ours we can fix
+      in a day. Theirs is the copy everyone else is using too.
+    </p>
+    <p class="onward">
+      <a href="/grammar">How a citation is written &rarr;</a>
+    </p>
+  </section>
+</SourcePage>
+
+<style>
+  .leaf { margin: 30px 0 0; padding: 0; }
+  .leaf img { width: 100%; height: clamp(90px, 14vw, 150px); object-fit: cover;
+    border: 1px solid var(--line); background: #efe6d6; }
+  .leaf figcaption { font-family: var(--ui); font-size: 12.5px; color: var(--muted);
+    margin-top: 10px; max-width: 66ch; line-height: 1.55; }
+  .leaf figcaption .ta { font-family: var(--ta); }
+  .onward { font-family: var(--ui); margin-top: 30px; }
+</style>

@@ -1,0 +1,97 @@
+---
+import SourcePage from '../../layouts/SourcePage.astro';
+---
+<SourcePage
+  title="Tamil Virtual Academy"
+  description="The கலைச்சொல் glossaries we are asking the Tamil Virtual Academy for, and what they would fix."
+  registryKey="kalaichol"
+  tamil="தமிழ் இணையக் கல்விக்கழகம்"
+  english="Tamil Virtual Academy"
+  state="asked-for"
+  lede="A Government of Tamil Nadu institution, and the single ask that would most improve this project. Their கலைச்சொல் glossaries would replace an unlicensed community word list with an authenticated one."
+  facts={[
+    { label: 'Who', value: 'Tamil Virtual Academy, Government of Tamil Nadu' },
+    { label: 'What we want', value: 'The கலைச்சொல் glossaries in machine-readable form, and a licence statement for the published archive' },
+    { label: 'Status', value: 'Letter drafted, not yet sent' },
+    { label: 'What it fixes', value: 'The one genuine licence gap this project currently ships' },
+  ]}
+  derivesFrom={[
+    { label: 'the drafted letter', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/sources/correspondence/2026-08-08-tamil-virtual-academy.md' },
+    { label: 'DECISIONS.md D-017', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+  ]}
+>
+  <section>
+    <h2>The problem this would solve</h2>
+    <p>
+      When the tool is asked for the pure-Tamil equivalent of a borrowed word, it answers from a
+      community-compiled aggregation of purist word lists. That list works. It also has
+      <b> no stated licence</b>, no named editor, and no upstream activity since 2020.
+    </p>
+    <p>
+      Anyone who inspects our sources will find that, and they would be right to think less of the
+      tool for it. We grade it D and say so in every answer that rests on it, which is honest and is
+      not a solution. A glossary published by the Government of Tamil Nadu is the solution.
+    </p>
+  </section>
+
+  <section>
+    <h2>What we are asking for</h2>
+    <ol class="asks">
+      <li>
+        <b>A licence statement</b> covering the published TVA archive, so that anyone building on it
+        knows where they stand. Cheap for the institution, and it unblocks more than us.
+      </li>
+      <li>
+        <b>The <span class="ta">கலைச்சொல்</span> glossaries in machine-readable form.</b> This is the
+        one that matters. It would let us retire an unlicensed word list and replace it with an
+        authenticated government glossary, with the attribution travelling on every answer.
+      </li>
+    </ol>
+    <p class="note">
+      <b>There is a precedent, and it is theirs.</b> TVA material is already on Tamil Wikisource under
+      CC0, through a collaboration TVA itself documented. Asking an institution to extend terms it has
+      already granted somewhere else is a much smaller request than asking it to invent a policy.
+    </p>
+  </section>
+
+  <section>
+    <h2>How we treat their material now, unasked</h2>
+    <p>
+      The TVA degree course books are the teaching material this project's grammar tables were checked
+      against. We hold copies. They are <b>deliberately kept out of version control</b>, and only the
+      derived, cited rule tables ship.
+    </p>
+    <p>
+      The reasoning is the ordinary one: facts about Tamil grammar are not copyrightable and citing a
+      source is scholarship, while redistributing a complete textbook is a different act with a
+      different answer. We did not need permission to do it that way. It seemed like the right way to
+      arrive at a request.
+    </p>
+  </section>
+
+  <section>
+    <h2>Something we owe them back</h2>
+    <p>
+      While pinning the classical editions we found that the course books quote Nannūl selectively and
+      renumber: their 336, 319 and 136 correspond to <b>337, 320 and 137</b> in the Project Madurai
+      edition. Three of our own rule tables carried the course-book numbers and were wrong because of
+      it.
+    </p>
+    <p>
+      That is not a complaint. It is the kind of thing that is invisible from inside a syllabus and
+      obvious the moment somebody machine-checks every citation, which is a thing this project does
+      by accident of its design. The list is theirs if they want it, along with anything else our
+      citation tests turn up.
+    </p>
+    <p class="note">
+      <a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a> · we are a nonprofit, the
+      code is Apache-2.0, the service is free, and there is no commercial product built on any of
+      this.
+    </p>
+  </section>
+</SourcePage>
+
+<style>
+  .asks { margin: 16px 0 0; padding-left: 22px; max-width: var(--measure); }
+  .asks li { margin: 12px 0; }
+</style>

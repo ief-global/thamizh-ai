@@ -1,0 +1,81 @@
+---
+import SourcePage from '../../layouts/SourcePage.astro';
+---
+<SourcePage
+  title="Aalamaram"
+  description="The Tamil treebank we have adopted in our design and have not been able to obtain."
+  tamil="ஆலமரம்"
+  english="Aalamaram"
+  state="asked-for"
+  lede="The largest public Tamil treebank we know of: around ten thousand sentences annotated for part of speech, named entities, morphology and dependencies. We have adopted it in the design and we have not been able to find where the data lives."
+  facts={[
+    { label: 'Published', value: 'WILDRE workshop at LREC 2024' },
+    { label: 'Size', value: '≈10,000 sentences, POS, NER, morphology, dependencies' },
+    { label: 'Notable', value: 'Universal Dependencies adjusted for Tamil clitics and segmentation' },
+    { label: 'Blocked on', value: 'Locating the distribution, and reading its licence' },
+  ]}
+  derivesFrom={[
+    { label: 'DECISIONS.md D-008', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+    { label: 'DESIGN.md §4.2', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DESIGN.md' },
+  ]}
+>
+  <section>
+    <h2>What we would do with it</h2>
+    <p>
+      Today we check our morphology one word at a time, against rules. A treebank lets us check it
+      against ten thousand sentences that somebody has already annotated by hand, which is a different
+      order of confidence.
+    </p>
+    <ul class="uses">
+      <li><b>Cross-check the analyser at scale.</b> Where our output and the treebank disagree, one of us is wrong and it is worth knowing which.</li>
+      <li><b>Evaluation with real context.</b> Our test words currently sit in isolation. A sentence is where ambiguity actually gets resolved.</li>
+      <li><b>Sentence support.</b> The step after single words needs contextual disambiguation, and that needs annotated sentences to learn from and to test against.</li>
+      <li><b>Corpus for anything later.</b> Every long-term plan in this project needs annotated Tamil, and there is very little of it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>A correction we made about it, publicly</h2>
+    <p>
+      An earlier version of our own plan proposed replacing our equivalents word list with Aalamaram.
+      That was wrong, and it is recorded as wrong in our decision log rather than edited away.
+      Aalamaram is a treebank. It says how sentences are structured. It is not a list of borrowed
+      words and their Tamil equivalents, and the two jobs have nothing to do with each other.
+    </p>
+    <p>
+      The mistake is worth leaving visible because it is the exact failure this project is built to
+      prevent: a confident sentence about a source, from someone who had read about it rather than
+      read it.
+    </p>
+  </section>
+
+  <section>
+    <h2>What we are asking</h2>
+    <p>
+      Only where to look. We could not find the data on Hugging Face or in a public repository, and
+      the paper is the trail we have. Two questions:
+    </p>
+    <ol class="asks">
+      <li>Where is the corpus distributed?</li>
+      <li>Under what licence, and are there conditions on using it to evaluate a tool that is itself public?</li>
+    </ol>
+    <p>
+      Until both are answered it stays adopted-in-principle and unused, which is the honest state and
+      not a comfortable one.
+      <a href="mailto:thamizh@ief-global.org">thamizh@ief-global.org</a>
+    </p>
+    <p class="note">
+      Aalamaram shares its lineage with <a href="/sources/thamizhimorph">ThamizhiMorph</a>, which we
+      already depend on, and with <a href="/sources/ilakkanam">ILAKKANAM</a>, which is how we would
+      measure ourselves. A great deal of what makes Tamil computable comes from a small number of
+      people.
+    </p>
+  </section>
+</SourcePage>
+
+<style>
+  .uses { margin: 16px 0 0; padding-left: 20px; max-width: var(--measure); }
+  .uses li { margin: 10px 0; }
+  .asks { margin: 16px 0 0; padding-left: 22px; max-width: var(--measure); }
+  .asks li { margin: 10px 0; }
+</style>
