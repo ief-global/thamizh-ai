@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Not linked from anywhere. Check it after every deploy and after any font change.
+// Failure looks like: detached or reordered vowel signs, tofu boxes, broken conjuncts.
+const conjuncts = ['ற்ற', 'ன்ற', 'க்ஷ', 'ஸ்ரீ', 'ஞ்ச', 'ண்ட', 'ழ்ந்', 'க்ஸ்'];
+const words = ['மரத்தில்', 'வந்தான்', 'கொடுத்தான்', 'படித்துக்கொண்டிருந்தார்கள்', 'பகுபத உறுப்பிலக்கணம்', 'தொல்காப்பியம்', 'நூற்பா', 'வேற்றுமை'];
+const sizes = [64, 40, 26, 17, 13];
+---
+<Base title="Rendering check" description="Tamil shaping test page." noindex={true}>
+  <div class="wrap">
+    <section>
+      <p class="kicker">Internal</p>
+      <h2>Tamil rendering check</h2>
+      <p>
+        Inspect this page at full size after every deploy and after any change to the font stack.
+        Broken shaping costs credibility with this audience in one screen, and it fails silently.
+      </p>
+
+      <h3 class="sub">Conjuncts</h3>
+      <p class="ta line big">{conjuncts.join(' · ')}</p>
+
+      <h3 class="sub">Words, at every size the site uses</h3>
+      {sizes.map((s) => (
+        <p class="ta line" style={`font-size:${s}px`}>{words.join('  ')}</p>
+      ))}
+
+      <h3 class="sub">Tamil inside the Latin UI face</h3>
+      <p class="uiface">Label with <span class="ta">வேற்றுமை</span> inside it, and a number 1,486.</p>
+
+      <h3 class="sub">Tamil inside the monospace face</h3>
+      <p class="monoface">பகுதி மரம் + சாரியை அத்து + விகுதி இல்</p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .sub { margin: 32px 0 0; color: var(--accent2); }
+  .line { max-width: none; line-height: 1.9; margin-top: 10px; word-spacing: .3em; }
+  .line.big { font-size: 56px; }
+  .uiface { font-family: var(--ui); font-size: 18px; font-variant-numeric: tabular-nums; }
+  .monoface { font-family: var(--mono); font-size: 18px; }
+</style>

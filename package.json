@@ -1,0 +1,16 @@
+{
+  "name": "thamizh-ai",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design and architecture site for thamizh-ai.org",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  }
+}

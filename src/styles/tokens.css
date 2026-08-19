@@ -1,0 +1,41 @@
+/* Design tokens. Source of truth: BRAND.md in ief-global/thamizh-mcp-design.
+   Change a value there first, then here. --ochre is the one token this site adds,
+   for hero eyebrows and source rules (WEBSITE-PLAN.md §4b). */
+
+:root {
+  --ink:#241c1c;
+  --muted:#6f6260;
+  --line:#e2d9d3;
+  --bg:#fbf8f5;
+  --card:#ffffff;
+  --sunk:#f2ece6;
+
+  --accent:#7a1f2b;    /* deep maroon: headings, kickers, the one emphasised word */
+  --accent2:#2f3d6b;   /* indigo: structural accents, diagrams */
+  --ochre:#a9762f;     /* sources, citations, hero eyebrow */
+  --ok:#1f6b4a;        /* verified */
+  --warn:#8a6a1f;      /* honest gap. A neutral signal, never an error red. */
+
+  --cream:#f7f0e8;     /* text on the dark hero */
+  --deep:#2a1416;      /* hero ground under the photograph */
+
+  --ta:"Noto Sans Tamil","Latha","Nirmala UI","Tamil Sangam MN","Lohit Tamil",sans-serif;
+  --ui:system-ui,-apple-system,"Segoe UI","Noto Sans Tamil",sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Menlo,Consolas,"Noto Sans Tamil",monospace;
+
+  --measure:64ch;
+  --wrap:980px;
+}
+
+/* Dark values from BRAND.md, extended for the tokens this site adds.
+   Three theme states: system (no stamp), explicit light, explicit dark. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink:#f0e9e4; --muted:#a3958f; --line:#3a3230; --bg:#1a1615; --card:#241f1d; --sunk:#201b19;
+    --accent:#e08a96; --accent2:#9fb0e6; --ochre:#d9a55c; --ok:#6fbf95; --warn:#d4a94e;
+  }
+}
+:root[data-theme="dark"] {
+  --ink:#f0e9e4; --muted:#a3958f; --line:#3a3230; --bg:#1a1615; --card:#241f1d; --sunk:#201b19;
+  --accent:#e08a96; --accent2:#9fb0e6; --ochre:#d9a55c; --ok:#6fbf95; --warn:#d4a94e;
+}
