@@ -73,9 +73,22 @@ Follow `anti-ai-writing-style.md` in the design repo. The ones that bite most of
 dashes, no "not X, but Y" reframes, short paragraphs, and no hype vocabulary. Scholarly and calm.
 Honesty is the brand: say what does not work yet.
 
+## Deployment
+
+Cloudflare Workers static assets, built from GitHub on push to `main`. Settings live in
+`wrangler.jsonc`, **not** in the dashboard: `assets.directory` is the output directory the
+dashboard does not ask for. Dashboard fields are `npm run build` and `npx wrangler deploy`.
+
+Verify a config change with `npx wrangler deploy --dry-run` before pushing. Do not deploy from a
+laptop: `main` is the deploy branch and the dashboard is the only thing that should be pushing.
+
 ## Gotchas
 
 - Nav entries and layer names for pages that are not built yet render as **plain text, not links**
   (`ready` flags in `Base.astro` and `LayerStack.astro`). Flip the flag when the page ships, and
   check `dist/` for dead internal links before pushing.
-- `build.format: 'file'`, so `src/pages/ta/index.astro` builds to `/ta.html`.
+- `build.format: 'file'`, so `src/pages/ta/index.astro` builds to `/ta.html`. Cloudflare's
+  `html_handling: auto-trailing-slash` serves that at `/ta`. Keep the two settings in step: changing
+  Astro's `trailingSlash` or `format` without changing `wrangler.jsonc` silently breaks every URL.
+- Contact address for the site is **thamizh@ief-global.org** (created 2026-08-19). Use it on
+  `/about` and in anything a scholar or an institution would reply to.
