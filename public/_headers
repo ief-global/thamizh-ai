@@ -1,0 +1,20 @@
+# Cloudflare Workers static-asset headers. Parsed by Workers, never served as an asset.
+# Verified against developers.cloudflare.com/workers/static-assets/headers 2026-08-19.
+
+# Hashed filenames, so these can be cached forever. This is the difference between a fast
+# page and a slow one for a reader on a phone in Chennai, which is most of the audience.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/img/*
+  Cache-Control: public, max-age=604800
+
+# Modest hardening. No inline third-party anything on this site, so none of it costs us.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN

@@ -100,6 +100,14 @@ dashboard does not ask for. Dashboard fields are `npm run build` and `npx wrangl
 Verify a config change with `npx wrangler deploy --dry-run` before pushing. Do not deploy from a
 laptop: `main` is the deploy branch and the dashboard is the only thing that should be pushing.
 
+**The production branch must stay `main`** (Settings → Build → Branch control). It defaults to the
+repository default branch, and if it ever gets set to `develop`, every integration push goes live.
+
+**Every page carries a canonical URL pointing at `https://thamizh-ai.org`**, computed in
+`Base.astro`. The workers.dev deployment and every preview build serve the same pages, and without
+canonicals they compete with the apex in search. That matters more than usual here, because the
+outreach letters cite the apex by name.
+
 ## Gotchas
 
 - **`const DRAFT` in `Base.astro`** shows or hides the draft banner. One switch, so it cannot be
