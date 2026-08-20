@@ -93,15 +93,20 @@ Honesty is the brand: say what does not work yet.
 
 ## Deployment
 
-Cloudflare Workers static assets, built from GitHub on push to `main`. Settings live in
-`wrangler.jsonc`, **not** in the dashboard: `assets.directory` is the output directory the
-dashboard does not ask for. Dashboard fields are `npm run build` and `npx wrangler deploy`.
+Cloudflare Workers static assets, deployed by **GitHub Actions** on push to `main`
+(`.github/workflows/deploy.yml`), using `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets.
 
-Verify a config change with `npx wrangler deploy --dry-run` before pushing. Do not deploy from a
-laptop: `main` is the deploy branch and the dashboard is the only thing that should be pushing.
+**We do not use Cloudflare's Git integration, on purpose.** The Cloudflare account that owns the
+`thamizh-ai.org` zone is not the identity used for GitHub work, and connecting it would add a second
+GitHub identity to the `ief-global` org for no benefit. Pushing from Actions keeps them apart. If
+someone reconnects the Cloudflare Git integration, disconnect it: both would deploy on every push.
 
-**The production branch must stay `main`** (Settings → Build → Branch control). It defaults to the
-repository default branch, and if it ever gets set to `develop`, every integration push goes live.
+Settings live in `wrangler.jsonc`, **not** in the dashboard: `assets.directory` is the output
+directory the dashboard never asks for. Verify a config change with `npx wrangler deploy --dry-run`
+before pushing. Do not deploy from a laptop.
+
+**Custom domains are `thamizh-ai.org` and `www.thamizh-ai.org` only.** `api.` is reserved for the
+REST and MCP head and was deliberately detached from this Worker after briefly serving the site.
 
 **Every page carries a canonical URL pointing at `https://thamizh-ai.org`**, computed in
 `Base.astro`. The workers.dev deployment and every preview build serve the same pages, and without

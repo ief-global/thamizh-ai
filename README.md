@@ -44,37 +44,44 @@ Node 18+ (built on 22). No database, no API, no server runtime. It is static fil
 
 ## Deploying
 
-Cloudflare builds this from GitHub. The dashboard asks for two commands and no output directory,
-because the output directory lives in [`wrangler.jsonc`](wrangler.jsonc) instead:
+**GitHub Actions deploys to Cloudflare on every push to `main`** (`.github/workflows/deploy.yml`).
+It builds, refuses to deploy if any internal link is dead, runs `wrangler deploy`, then checks that
+the live site answers.
 
-| Field | Value | Where |
-|---|---|---|
-| Build command | `npm run build` | Settings → Build |
-| Deploy command | `npx wrangler deploy` | Settings → Build |
-| Root directory | leave empty | Settings → Build |
-| **Production branch** | **`main`** | Settings → Build → **Branch control** |
-| Builds for non-production branches | on, if you want preview URLs per PR | same panel |
-| Custom domain | `thamizh-ai.org` | Settings → **Domains & Routes** → Add → Custom Domain |
+This pushes *from* GitHub *to* Cloudflare, which is the opposite of Cloudflare's Git integration,
+and that is deliberate. The Cloudflare account holding the `thamizh-ai.org` zone is not the identity
+used for GitHub work here, and connecting it would put a second GitHub identity on the `ief-global`
+org for no benefit. A scoped API token keeps the two apart.
 
-**Production branch defaults to the repository's default branch**, so check it. If it is set to
-`develop`, every integration push goes straight to the live site, which is exactly what the
-`develop` → PR → `main` flow exists to prevent.
+### One-time setup
 
-Turning non-production builds on is worth it here: each PR gets its own URL, so the rendered Tamil
-can be checked before merge rather than after.
+1. In the Cloudflare account that owns the Worker: **My Profile → API Tokens → Create Token →
+   "Edit Cloudflare Workers"**. Scope it to that account only, and to the `thamizh-ai.org` zone only.
+2. In this repository: **Settings → Secrets and variables → Actions**, add
+   `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` (the ID on the Workers & Pages overview).
+3. If Cloudflare's own Git integration is connected to this Worker, **disconnect it**, or both will
+   deploy on every push.
 
-`wrangler.jsonc` declares `assets.directory: "./dist"`, `html_handling: "auto-trailing-slash"` so a
-page is served at `/why` rather than `/why.html`, and `not_found_handling: "404-page"` so a bad URL
-gets our own 404. There is no `main`: this is an assets-only Worker, so no server code runs.
+Rotate the token by replacing the secret. Nothing in the repo changes.
 
-Check it locally before pushing a change to the deploy config:
+### The Worker's own settings
+
+`wrangler.jsonc` carries what the dashboard does not ask for: `assets.directory` is `./dist`,
+`html_handling` is `auto-trailing-slash` so a page serves at `/why` rather than `/why.html`, and
+`not_found_handling` is `404-page`. There is no `main`, so this is an assets-only Worker and no
+server code runs.
+
+Custom domains on the Worker: **`thamizh-ai.org`** and **`www.thamizh-ai.org`**. `api.` is reserved
+for the REST and MCP head later and must not be pointed at this Worker.
+
+Check a deploy-config change before pushing:
 
 ```bash
 npm run build
 npx wrangler deploy --dry-run
 ```
 
-## Layout
+## Layout## Layout
 
 ```
 src/

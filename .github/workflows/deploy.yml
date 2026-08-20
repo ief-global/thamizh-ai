@@ -1,0 +1,94 @@
+# Deploy to Cloudflare on push to main.
+#
+# This pushes FROM GitHub TO Cloudflare, which is the opposite of Cloudflare's Git
+# integration. It is deliberate: the Cloudflare account that owns the thamizh-ai.org zone
+# (triangle.ief) is not the identity used for any GitHub work here, and connecting it would
+# put a second GitHub identity on the ief-global org for no benefit. A scoped API token
+# keeps the two worlds apart.
+#
+# Required repository secrets (Settings > Secrets and variables > Actions):
+#   CLOUDFLARE_API_TOKEN   — "Edit Cloudflare Workers" template, scoped to that one account
+#                            and to the thamizh-ai.org zone only
+#   CLOUDFLARE_ACCOUNT_ID  — the account ID shown on the Workers & Pages overview
+#
+# Rotate the token by replacing the secret; nothing in the repo needs to change.
+
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://thamizh-ai.org
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fail early if the deploy secrets are missing
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          missing=""
+          [ -z "$TOKEN" ]   && missing="$missing CLOUDFLARE_API_TOKEN"
+          [ -z "$ACCOUNT" ] && missing="$missing CLOUDFLARE_ACCOUNT_ID"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secret(s):$missing"
+            echo "Add them under Settings > Secrets and variables > Actions. See .github/workflows/deploy.yml."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # Never deploy a site with a dead internal link. The whole point of these pages is
+      # that they hyperlink, and letters to institutions cite them by address.
+      - name: Check internal links
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, sys
+          dist = pathlib.Path('dist')
+          bad = []
+          for page in dist.rglob('*.html'):
+              for href in re.findall(r'href="(/[^"#?]*)"', page.read_text(encoding='utf-8')):
+                  target = href.lstrip('/')
+                  if target == '':
+                      continue
+                  if (dist/target).exists() or (dist/(target + '.html')).exists() or (dist/target/'index.html').exists():
+                      continue
+                  bad.append(f"{page.relative_to(dist)} -> {href}")
+          if bad:
+              print("Dead internal links, refusing to deploy:")
+              print("\n".join(sorted(set(bad))))
+              sys.exit(1)
+          print("Internal links OK")
+          PY
+
+      - name: Deploy
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Verify the site is serving the new build
+        run: |
+          sleep 10
+          for path in / /why /sources/tva /status; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 25 "https://thamizh-ai.org$path")
+            echo "$path -> $code"
+            [ "$code" = "200" ] || { echo "::error::https://thamizh-ai.org$path returned $code"; exit 1; }
+          done
