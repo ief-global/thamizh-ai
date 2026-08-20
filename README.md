@@ -55,14 +55,20 @@ org for no benefit. A scoped API token keeps the two apart.
 
 ### One-time setup
 
-1. In the Cloudflare account that owns the Worker: **My Profile → API Tokens → Create Token →
-   "Edit Cloudflare Workers"**. Scope it to that account only, and to the `thamizh-ai.org` zone only.
+1. **Log into the Cloudflare account that owns the Worker** — this is the step that goes wrong.
+   API tokens belong to a user *and* are scoped to accounts, so a token created while logged into
+   the wrong account fails with `Authentication error [code: 10000]`, which reads like a bad token
+   rather than the wrong account. There are two accounts in play on this project.
+   Then: **My Profile → API Tokens → Create Token → "Edit Cloudflare Workers"**, scoped to that
+   account only and to the `thamizh-ai.org` zone only.
 2. In this repository: **Settings → Secrets and variables → Actions**, add
    `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` (the ID on the Workers & Pages overview).
 3. If Cloudflare's own Git integration is connected to this Worker, **disconnect it**, or both will
    deploy on every push.
 
-Rotate the token by replacing the secret. Nothing in the repo changes.
+The workflow checks the token can actually reach the account before it tries to deploy, and prints
+which accounts the token *can* see when it cannot. Rotate the token by replacing the secret; nothing
+in the repo changes.
 
 ### The Worker's own settings
 

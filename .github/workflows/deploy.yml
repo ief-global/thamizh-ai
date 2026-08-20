@@ -47,6 +47,39 @@ jobs:
             exit 1
           fi
 
+      # wrangler's own failure for a cross-account token is "Authentication error [code:
+      # 10000]", which sounds like a bad token rather than the real cause: a token created
+      # in a DIFFERENT Cloudflare account than the one holding the Worker. There are two
+      # accounts in play here, so check it up front and say so plainly.
+      - name: Verify the token can actually see this account
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          body=$(curl -s --max-time 25 -H "Authorization: Bearer $TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT")
+          if echo "$body" | grep -q '"success":true'; then
+            name=$(echo "$body" | sed -n 's/.*"name":"\([^"]*\)".*/\1/p' | head -1)
+            echo "Token can access account $ACCOUNT ($name)."
+            exit 0
+          fi
+          echo "::error::CLOUDFLARE_API_TOKEN cannot access account CLOUDFLARE_ACCOUNT_ID."
+          echo ""
+          echo "This is almost always a cross-account token: the token was created while"
+          echo "logged into one Cloudflare account, and CLOUDFLARE_ACCOUNT_ID belongs to"
+          echo "another. This project has two accounts in play, so it is an easy mistake."
+          echo ""
+          echo "The Worker and the thamizh-ai.org zone live in the account whose ID is in"
+          echo "CLOUDFLARE_ACCOUNT_ID. Create the token while logged into THAT account:"
+          echo "  My Profile > API Tokens > Create Token > 'Edit Cloudflare Workers'"
+          echo "  Scope it to that account only, and the thamizh-ai.org zone only."
+          echo ""
+          echo "Accounts this token CAN see:"
+          curl -s --max-time 25 -H "Authorization: Bearer $TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts" \
+            | tr ',' '\n' | grep -E '"(id|name)"' | sed 's/^/  /' || true
+          exit 1
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
