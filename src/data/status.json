@@ -1,11 +1,11 @@
 {
   "_comment": "THE ONLY PLACE A MEASURED NUMBER LIVES ON THIS SITE. Never type one into prose. Source of truth is CODE-STATUS.md in ief-global/thamizh-mcp-design; when it changes, change this file in the same session.",
-  "verified_on": "2026-11-24",
+  "verified_on": "2026-11-25",
   "source": "https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md",
   "figures": {
     "tools": 9,
-    "tests": 279,
-    "tests_note": "5 skip without a live foma install",
+    "tests": 360,
+    "tests_note": "the analyser tests skip without a live foma install",
     "sweep_words": 108,
     "origin_correct": 92,
     "origin_unknown": 12,
@@ -20,7 +20,7 @@
     "The full புணரியல் sandhi engine",
     "Storage backend abstraction",
     "The morphological-lift evaluation, paused",
-    "Checking each formation split against the word it came from",
+    "Naming the doubled consonant in strong verbs, parked until a cited rule is found",
     "Reading en.wiktionary's newer etymology templates",
     "No release rung shipped: version is still 0.1.0"
   ]
