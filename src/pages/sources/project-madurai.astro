@@ -5,19 +5,19 @@ const v = status.figures.classical_verses;
 ---
 <SourcePage
   title="Project Madurai"
-  description="The pinned editions of Tholkappiyam and Nannūl that every grammar claim on this project quotes."
+  description="The pinned editions of Tholkappiyam and Nannūl that every grammar claim on this project quotes, and the classical commentary beside them."
   registryKey="tholkappiyam"
   english="Project Madurai"
   state="pinned"
   lede="The volunteers who put classical Tamil into electronic form and gave it away. Every நூற்பா this project quotes comes from their editions, pinned by checksum and read while the server runs."
   facts={[
-    { label: 'What we pinned', value: `தொல்காப்பியம், ${v.tholkappiyam} நூற்பா · நன்னூல், ${v.nannul} நூற்பா` },
-    { label: 'Pinned on', value: '2026-08-02, with a sha256 recorded for each file' },
+    { label: 'What we pinned', value: `தொல்காப்பியம், ${v.tholkappiyam} நூற்பா · நன்னூல், ${v.nannul} நூற்பா · நச்சினார்க்கினியர் உரை on எழுத்ததிகாரம்` },
+    { label: 'Pinned on', value: 'Nannūl 2026-08-02. Tholkappiyam and the commentary 2026-11-24, from Project Madurai\'s own pages. A sha256 is recorded for each file' },
     { label: 'Terms', value: 'Free distribution, provided their header travels with the text' },
-    { label: 'Credit', value: '© Project Madurai 1999–2001 · etext Dr. K. Kalyanasundaram · proof-reading N. D. Logasundaram' },
+    { label: 'Credit', value: '© Project Madurai · etext Dr. K. Kalyanasundaram · proof-reading N. D. Logasundaram · each file\'s own header travels with it' },
   ]}
   derivesFrom={[
-    { label: 'DECISIONS.md D-011 and D-018', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
+    { label: 'DECISIONS.md D-011, D-018 and D-024', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
     { label: 'the pinned texts', href: 'https://github.com/ief-global/thamizh-mcp/tree/main/data/classical' },
   ]}
 >
@@ -76,6 +76,42 @@ const v = status.figures.classical_verses;
       Verses are also never retyped, in the code or on this site. They are quoted programmatically
       from the pinned files, because a transcription drifts within minutes of being read and the
       drift is invisible. That rule caught five verses drifting during a single session.
+    </p>
+  </section>
+
+  <section>
+    <h2>We pinned a mirror first, and it was wrong</h2>
+    <p>
+      In August the Tholkappiyam text came from a copy of Project Madurai's etext hosted on another
+      site. In November, while lining it up against a classical commentary, we found that the copy
+      had lost characters. The <span class="ta">ஆய்தம்</span> ஃ was missing from some verses and the
+      vowel sign <span class="ta">ொ</span> from others, a few verses had run into their neighbours,
+      and the last <span class="ta">இயல்</span> of <span class="ta">பொருளதிகாரம்</span> was filed
+      under the wrong name.
+    </p>
+    <p>
+      We compared every verse with Project Madurai's own page. Every character of the old copy is in
+      theirs, and theirs restores everything the mirror dropped. The text is now pinned from their
+      page directly, and the tests now check the text itself for damage.
+    </p>
+    <p class="note">
+      <b>The lesson is general.</b> A mirror can fail quietly. Pin from the publisher.
+    </p>
+  </section>
+
+  <section>
+    <h2>A commentary, for what the verses leave unsaid</h2>
+    <p>
+      A <span class="ta">நூற்பா</span> is terse by design. The classical commentators explain each one
+      and work examples through it. <span class="ta">நச்சினார்க்கினியர்</span>'s commentary on
+      <span class="ta">எழுத்ததிகாரம்</span>, also from Project Madurai, is now pinned beside the text.
+      Its worked examples are what an engine needs to test a rule in both directions: take a word
+      apart, then put it back together.
+    </p>
+    <p>
+      It numbers its verses continuously, where our edition restarts the count in every
+      <span class="ta">இயல்</span>, and it divides two <span class="ta">இயல்</span> differently. So
+      each part of the commentary is matched to our verses by its text, never by its number.
     </p>
   </section>
 

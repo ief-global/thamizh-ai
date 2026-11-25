@@ -4,7 +4,7 @@
   "source": "https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md",
   "figures": {
     "tools": 9,
-    "tests": 270,
+    "tests": 279,
     "tests_note": "5 skip without a live foma install",
     "sweep_words": 108,
     "origin_correct": 92,
@@ -12,7 +12,7 @@
     "origin_wrong": 2,
     "formation_decoded": 26,
     "formation_in_scope": 29,
-    "classical_verses": { "tholkappiyam": 1486, "nannul": 462 },
+    "classical_verses": { "tholkappiyam": 1602, "nannul": 462 },
     "equivalents_mappings": 2063
   },
   "not_done": [
