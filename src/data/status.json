@@ -4,7 +4,7 @@
   "source": "https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md",
   "figures": {
     "tools": 9,
-    "tests": 440,
+    "tests": 442,
     "tests_note": "the analyser tests skip without a live foma install",
     "sweep_words": 108,
     "origin_correct": 92,
