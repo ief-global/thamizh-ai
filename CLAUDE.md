@@ -11,7 +11,8 @@ The plan this repo is built from is `WEBSITE-PLAN.md` in the design repo. Read i
 
 ## Git identity — use everywhere, no exceptions
 Commit as **Saran Saravanan <saravanan3@duck.com>**, GitHub **ssaravanan3**.
-NEVER commit under the legacy `asaravanan75@gmail.com`. Verify: `git log --format='%an <%ae>' -1`.
+Any other author address is wrong: stop and fix it before pushing. Never write a personal email
+address into this public repo. Verify: `git log --format='%an <%ae>' -1`.
 
 ## Branch workflow — same as the other two repos
 `main` = stable, deployed. `develop` = integration. Work on **`develop`** → push → open PR
