@@ -64,12 +64,12 @@ const working = [
             <tr>
               <td>Wrong</td>
               <td class="n big bad">{f.origin_wrong}</td>
-              <td class="muted">One word. We know which one, and it is in the sweep output rather than hidden.</td>
+              <td class="muted">Each wrong answer is named in the sweep output rather than hidden.</td>
             </tr>
             <tr>
               <td>Formation decoded</td>
               <td class="n big">{f.formation_decoded}<span class="of">/{f.formation_in_scope}</span></td>
-              <td class="muted">Of the words in scope for பகுபத உறுப்பிலக்கணம். The rest are non-finite forms.</td>
+              <td class="muted">Of the words in scope for பகுபத உறுப்பிலக்கணம். The rest are non-finite forms. A split counts as decoded without being checked against the word, so this reads higher than it should.</td>
             </tr>
             <tr>
               <td>Automated tests</td>
@@ -104,6 +104,19 @@ const working = [
         <dd class="ta">
           Where no confident classical rule fires, the join is left unnamed rather than guessed. That
           is correct behaviour and it is below the standard the product should eventually meet.
+        </dd>
+        <dt>A formation split can lose a letter</dt>
+        <dd class="ta">
+          The decoder builds a word's parts from the analyser's tags and never rebuilds the word to
+          compare. Some past-tense forms come back short: <span class="ta">வந்தான்</span> decodes as
+          <span class="ta">வா + த் + ஆன்</span>, with its <span class="ta">ந்</span> missing. The fix
+          checks every split against its word and declares a gap when it does not add up.
+        </dd>
+        <dt>Our etymology source changes under us</dt>
+        <dd class="ta">
+          en.wiktionary is edited by volunteers. Some words changed answer between measurements
+          because their pages were edited, and one edit uses a template style we do not read yet.
+          This is why the sweep is re-run rather than trusted.
         </dd>
         <dt>Origin is unknown more often than we would like</dt>
         <dd class="ta">

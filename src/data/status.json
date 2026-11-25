@@ -1,15 +1,15 @@
 {
   "_comment": "THE ONLY PLACE A MEASURED NUMBER LIVES ON THIS SITE. Never type one into prose. Source of truth is CODE-STATUS.md in ief-global/thamizh-mcp-design; when it changes, change this file in the same session.",
-  "verified_on": "2026-08-11",
+  "verified_on": "2026-11-24",
   "source": "https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md",
   "figures": {
     "tools": 9,
     "tests": 266,
     "tests_note": "5 skip without a live foma install",
     "sweep_words": 108,
-    "origin_correct": 94,
-    "origin_unknown": 11,
-    "origin_wrong": 1,
+    "origin_correct": 91,
+    "origin_unknown": 12,
+    "origin_wrong": 3,
     "formation_decoded": 26,
     "formation_in_scope": 29,
     "classical_verses": { "tholkappiyam": 1486, "nannul": 462 },
@@ -20,7 +20,8 @@
     "The full புணரியல் sandhi engine",
     "Storage backend abstraction",
     "The morphological-lift evaluation, paused",
-    "No CI in the code repo yet",
+    "Checking each formation split against the word it came from",
+    "Reading en.wiktionary's newer etymology templates",
     "No release rung shipped: version is still 0.1.0"
   ]
 }
