@@ -3,20 +3,22 @@ import SourcePage from '../../layouts/SourcePage.astro';
 ---
 <SourcePage
   title="Tamil Virtual Academy"
-  description="The கலைச்சொல் glossaries we are asking the Tamil Virtual Academy for, and what they would fix."
+  description="The Tamil Virtual Academy's material, published under CC BY-SA 4.0, and the கலைச்சொல் glossaries we still need as data."
   registryKey="kalaichol"
   tamil="தமிழ் இணையக் கல்விக்கழகம்"
   english="Tamil Virtual Academy"
   state="asked-for"
-  lede="A Government of Tamil Nadu institution, and the single ask that would most improve this project. Their கலைச்சொல் glossaries would replace an unlicensed community word list with an authenticated one."
+  lede="A Government of Tamil Nadu institution whose material is published under CC BY-SA 4.0. Its கலைச்சொல் glossaries, held as data, would replace an unlicensed community word list with an authenticated one."
   facts={[
     { label: 'Who', value: 'Tamil Virtual Academy, Government of Tamil Nadu' },
-    { label: 'What we want', value: 'The கலைச்சொல் glossaries in machine-readable form, and a licence statement for the published archive' },
-    { label: 'Status', value: 'Letter drafted, not yet sent' },
+    { label: 'Licence', value: 'CC BY-SA 4.0, for all TVA materials' },
+    { label: 'What we still want', value: 'The கலைச்சொல் glossaries in machine-readable form' },
+    { label: 'Status', value: 'Licence settled in person at TVA, Chennai, November 2026. Glossaries as data: open' },
     { label: 'What it fixes', value: 'The one genuine licence gap this project currently ships' },
   ]}
   derivesFrom={[
-    { label: 'the drafted letter', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/sources/correspondence/2026-08-08-tamil-virtual-academy.md' },
+    { label: 'the reply record', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/sources/correspondence/2026-11-tamil-virtual-academy-reply.md' },
+    { label: 'DECISIONS.md D-021', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
     { label: 'DECISIONS.md D-017', href: 'https://github.com/ief-global/thamizh-mcp-design/blob/main/DECISIONS.md' },
   ]}
 >
@@ -35,37 +37,32 @@ import SourcePage from '../../layouts/SourcePage.astro';
   </section>
 
   <section>
-    <h2>What we are asking for</h2>
+    <h2>Where things stand</h2>
     <ol class="asks">
       <li>
-        <b>A licence statement</b> covering the published TVA archive, so that anyone building on it
-        knows where they stand. Cheap for the institution, and it unblocks more than us.
+        <b>The licence is settled.</b> TVA states in writing that the works of the
+        <span class="ta">தமிழ்ப்பெருங்களஞ்சியம்</span> are published under CC BY-SA 4.0, and that licence
+        extends to all TVA materials. TVA's stated purpose in hosting them is for others to build on.
       </li>
       <li>
-        <b>The <span class="ta">கலைச்சொல்</span> glossaries in machine-readable form.</b> This is the
-        one that matters. It would let us retire an unlicensed word list and replace it with an
-        authenticated government glossary, with the attribution travelling on every answer.
+        <b>The <span class="ta">கலைச்சொல்</span> glossaries as data are still open.</b> The licence now
+        lets us use them wherever we find them. What remains is finding them in a structured form,
+        so that each borrowed term is paired with its accepted Tamil equivalent and the attribution
+        travels on every answer.
       </li>
     </ol>
-    <p class="note">
-      <b>There is a precedent, and it is theirs.</b> TVA material is already on Tamil Wikisource under
-      CC0, through a collaboration TVA itself documented. Asking an institution to extend terms it has
-      already granted somewhere else is a much smaller request than asking it to invent a policy.
-    </p>
   </section>
 
   <section>
-    <h2>How we treat their material now, unasked</h2>
+    <h2>How we use their material</h2>
     <p>
       The TVA degree course books are the teaching material this project's grammar tables were checked
-      against. We hold copies. They are <b>deliberately kept out of version control</b>, and only the
-      derived, cited rule tables ship.
+      against. Data derived from TVA material ships with attribution to TVA and stays CC BY-SA, as the
+      licence requires. It is never relicensed under the code's Apache-2.0.
     </p>
     <p>
-      The reasoning is the ordinary one: facts about Tamil grammar are not copyrightable and citing a
-      source is scholarship, while redistributing a complete textbook is a different act with a
-      different answer. We did not need permission to do it that way. It seemed like the right way to
-      arrive at a request.
+      The books themselves stay out of version control because of their size. The same material is
+      mirrored on archive.org, which we read from when tamilvu.org is unavailable.
     </p>
   </section>
 
