@@ -69,7 +69,7 @@ const working = [
             <tr>
               <td>Formation decoded</td>
               <td class="n big">{f.formation_decoded}<span class="of">/{f.formation_in_scope}</span></td>
-              <td class="muted">Of the words in scope for பகுபத உறுப்பிலக்கணம். The rest are non-finite forms. A split counts as decoded without being checked against the word, so this reads higher than it should.</td>
+              <td class="muted">Of the words in scope for பகுபத உறுப்பிலக்கணம். The rest are non-finite forms. A split counts only if joining its parts back rebuilds the word.</td>
             </tr>
             <tr>
               <td>Automated tests</td>
@@ -105,12 +105,12 @@ const working = [
           Where no confident classical rule fires, the join is left unnamed rather than guessed. That
           is correct behaviour and it is below the standard the product should eventually meet.
         </dd>
-        <dt>A formation split can lose a letter</dt>
+        <dt>A doubled consonant has no name yet</dt>
         <dd class="ta">
-          The decoder builds a word's parts from the analyser's tags and never rebuilds the word to
-          compare. Some past-tense forms come back short: <span class="ta">வந்தான்</span> decodes as
-          <span class="ta">வா + த் + ஆன்</span>, with its <span class="ta">ந்</span> missing. The fix
-          checks every split against its word and declares a gap when it does not add up.
+          In a strong verb such as <span class="ta">படித்தான்</span>, a consonant appears doubled where
+          the parts meet. Every split must now rebuild its word, so that consonant is shown as a part
+          of the word. Which part it is, the texts we hold do not yet say. The label stays empty until
+          a cited rule supplies one.
         </dd>
         <dt>Our etymology source changes under us</dt>
         <dd class="ta">
