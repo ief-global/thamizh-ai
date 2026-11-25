@@ -4,7 +4,7 @@
   "source": "https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md",
   "figures": {
     "tools": 9,
-    "tests": 385,
+    "tests": 395,
     "tests_note": "the analyser tests skip without a live foma install",
     "sweep_words": 108,
     "origin_correct": 92,
@@ -20,7 +20,7 @@
     "The full புணரியல் sandhi engine",
     "Storage backend abstraction",
     "The morphological-lift evaluation, paused",
-    "Applying the classical commentaries to the verbs whose root itself changes, such as சொன்னான் and கேட்டான்",
+    "Naming the change in சொன்னான், the one verb root no commentary we hold splits",
     "Reading en.wiktionary's newer etymology templates",
     "No release rung shipped: version is still 0.1.0"
   ]
