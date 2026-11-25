@@ -4,7 +4,7 @@
   "source": "https://github.com/ief-global/thamizh-mcp-design/blob/main/CODE-STATUS.md",
   "figures": {
     "tools": 9,
-    "tests": 439,
+    "tests": 442,
     "tests_note": "the analyser tests skip without a live foma install",
     "sweep_words": 108,
     "origin_correct": 92,
@@ -20,7 +20,7 @@
     "The full புணரியல் sandhi engine",
     "Storage backend abstraction",
     "The morphological-lift evaluation, paused",
-    "Two kinds of root change the commentators list that the engine does not apply yet",
+    "One kind of root change the commentators list that the engine does not apply yet",
     "Reading en.wiktionary's newer etymology templates",
     "No release rung shipped: version is still 0.1.0"
   ]
